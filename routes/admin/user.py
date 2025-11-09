@@ -10,6 +10,38 @@ import os
 # ===============================================================================================================
 # api with backend (postman)
 # ===============================================================================================================
+@app.post("/user-management/create-role-json")
+def user_management_create_role():
+    try:
+        json_data = request.json
+        if not json_data:
+            return jsonify({"message": "No Data Provided"}), 400
+
+        name = json_data.get("name")
+        if not name:
+            return jsonify({"message": "No Name Provided"}), 400
+
+        status = json_data.get("status")
+        if not status:
+            return jsonify({"message": "No Status Provided"}), 400
+
+        if status and status not in ("Enable", "Disable"):
+            return jsonify({"error": "Status must be Enable or Disable"}), 400
+
+        existing = UserRole.query.filter_by(name=name).first()
+        if existing:
+            return jsonify({"error": "Role name already exists"}), 409
+
+        new_role = UserRole(name=name, status=status)
+        db.session.add(new_role)
+        db.session.commit()
+
+        return jsonify({"message": "Role created successfully"}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.get("/user-management/list-json")
 def user_management_list_json():
     try:
