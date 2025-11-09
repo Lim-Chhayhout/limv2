@@ -1,0 +1,66 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+    <div class="detail">
+        <div class="container">
+            <div class="con">
+                <div class="col flex-width">
+                    <div class="sub-slide">
+                        <div class="slide">
+                            <img src="{{ url_for('static', filename='images/product_icon.png') }}" alt="sub display image">
+                        </div>
+                        <div class="slide">
+                             <img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="sub display image">
+                        </div>
+                    </div>
+                    <div class="main-slide">
+                        <img id="display-image" src="{{ url_for('static', filename='images/product_icon.png') }}" loading="lazy" alt="display image">
+                    </div>
+                </div>
+                <div class="col fixed-width">
+                    <div class="row">
+                        <div class="status">
+                         <div class="status-condition">
+                             <span class="new">New</span>
+                         </div>
+                         <div class="status-stock">
+                             <span class="pre-order">Pre-order</span>
+                         </div>
+                     </div>
+                    </div>
+                    <div class="row">
+                        <h2 class="pn">Product Name</h2>
+                    </div>
+                    <div class="row">
+                        <h2 class="ps"><span>h23chde</span></h2>
+                    </div>
+                    <div class="row">
+                        <h2 class="pp">$30.00</h2>
+                    </div>
+                    <div class="row pd">
+                        <a href="#">
+                            <div class="btn">
+                                Add to cart <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <legend class="ps">Details</legend>
+                            <h2>Review - <a href="#">https://www.tiktok.com/</a></h2>
+                            <h2>Category - <span>Keyboard</span></h2>
+                            <h2>Brand - <span>Aula Keyboard</span></h2>
+                            <h2>Description -  <span>
+                                AULA F75 Pro Mechanical Gaming Keyboard
+                                - High-performance mechanical switches for ultra-responsive keystrokes
+                                - Full RGB backlighting with customizable lighting effects
+                            </span></h2>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "layouts/lists/list-by-category.html" %}
+{% endblock %}
+

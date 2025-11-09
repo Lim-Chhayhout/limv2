@@ -1,0 +1,10 @@
+1. User Login 
+	- check user role
+	- check user status
+	- check role status
+	-> enable or disable user login by status
+	-> enable or disable role login by status
+	-> forget username/email/password
+2. User Register
+	- first with admin
+	-> admin register employee/user later

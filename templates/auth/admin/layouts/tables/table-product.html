@@ -1,0 +1,55 @@
+<div class="head-row">
+    <div class="col">
+        All Products
+    </div>
+    <div class="col">
+        <div class="sub">
+            <div class="search">
+                <div class="icon">
+                    <div class="circle"></div>
+                    <div class="stand"></div>
+                </div>
+                <input type="text" name="search-product" placeholder="Search">
+            </div>
+        </div>
+        <div class="sub">
+            <a href="{{ url_for('product_management_add') }}">
+                 <div class="btn">
+                    <span>Add New Product</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<table class="tbl">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="row" data-href="{{ url_for('product_management_show') }}">
+            <td><img src="{{ url_for('static', filename='images/product_icon.png') }}" alt="Product 1" width="50"></td>
+            <td>PRD002</td>
+            <td>Product Name 1</td>
+            <td>$25.00</td>
+            <td>
+                <div class="status">
+                    In-stock
+                </div>
+            </td>
+            <td>
+                <a href="{{ url_for('product_management_edit') }}">
+                    <div class="btn">
+                        <span>Edit</span>
+                    </div>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

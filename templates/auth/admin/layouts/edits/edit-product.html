@@ -1,0 +1,123 @@
+<div class="head-row">
+    <div class="col">
+        Edit Product
+    </div>
+    <div class="col">
+        <div class="sub">
+            <a href="{{ url_for('product_management') }}">
+                <div class="btn-back">
+                    <span>Back</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<form action="" method="POST">
+        <div class="col">
+             <div class="row">
+                <h2>Code</h2>
+                <div class="lim-input">
+                    <span>Product Code</span>
+                    <input type="text" name="code" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Brand</h2>
+                <div class="lim-input">
+                    <span>Product Brand</span>
+                    <input type="text" name="pbrand" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Name</h2>
+                <div class="lim-input" >
+                    <span>Product name</span>
+                    <input type="text" name="pname" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Price</h2>
+                <div class="lim-input" >
+                    <span>Product Price</span>
+                    <input type="number" name="price"  class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Discount</h2>
+                <div class="lim-input">
+                    <span>Discount [%]</span>
+                    <input type="number" name="discount"  class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Description</h2>
+                <textarea name="description" ></textarea>
+            </div>
+            <div class="row">
+                <h2>Product Review</h2>
+                <div class="lim-input" >
+                    <span>Link</span>
+                    <input type="text" name="review" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn">Save <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px"></button>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <h2>Product Images</h2>
+                <div class="flex">
+                    <div class="image-input">
+                        <span>Upload Image1</span>
+                        <input type="file" id="pimage1-upload" name="pimage1" accept="image/*" hidden required>
+                        <img class="pre-image previewImage1" src="" alt="Image1 Preview" style="display: none;">
+                        <div class="btn-browse-image upload1"></div>
+                    </div>
+                    <div class="image-input">
+                        <span>Upload Image2</span>
+                        <input type="file" id="pimage2-upload" name="pimage2" accept="image/*" hidden required>
+                        <img class="pre-image previewImage2" src="" alt="Image2 Preview" style="display: none;">
+                        <div class="btn-browse-image upload2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Condition</h2>
+                <div class="lim-input" >
+                    <span>Select Condition</span>
+                    <select name="pcondition" class="lim-input-style" required>
+                        <option value="New">New</option>
+                        <option value="Used">Used</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Category</h2>
+                <div class="lim-input">
+                    <span>Select Category</span>
+                    <select name="category" class="lim-input-style" required>
+                        <option value="1">Keyboard</option>
+                        <option value="2">Mouse</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Status</h2>
+                <div class="lim-input">
+                    <span>Select Status</span>
+                    <select name="pstatus" id="pstatus-edit" class="lim-input-style" required>
+                        <option value="true">In-stock</option>
+                        <option value="false">Pre-order</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" id="row-edit-stock">
+                <h2>Quantity Stock</h2>
+                <div class="lim-input">
+                    <span>Product Stock</span>
+                    <input type="number" name="stock" id="stock-edit" class="lim-input-style" required>
+                </div>
+            </div>
+        </div>
+    </form>

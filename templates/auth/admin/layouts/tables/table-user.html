@@ -1,0 +1,57 @@
+<div class="head-row">
+    <div class="col">
+        All Users
+    </div>
+    <div class="col">
+        <div class="sub">
+            <div class="search">
+                <div class="icon">
+                    <div class="circle"></div>
+                    <div class="stand"></div>
+                </div>
+                <input type="text" name="search-user" placeholder="Search">
+            </div>
+        </div>
+        <div class="sub">
+            <a href="{{ url_for('user_management_add') }}">
+                 <div class="btn">
+                    <span>Add New User</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<table class="tbl">
+    <thead>
+        <tr>
+            <th>Profile</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="tbl-body">
+        <tr class="row" data-href="{{ url_for('user_management_show') }}">
+            <td><img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="Product 1" width="50"></td>
+            <td>Lim Chhayhout</td>
+            <td>
+                <div class="role-user">
+                    Admin
+                </div>
+            </td>
+            <td>
+                <div class="status">
+                    Active
+                </div>
+            </td>
+            <td>
+                 <a href="{{ url_for('user_management_edit') }}">
+                    <div class="btn">
+                        <span>Edit</span>
+                    </div>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

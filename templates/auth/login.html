@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+
+    <!--  fonts  -->
+    {%  include "fonts/roboto-condensed.html" %}
+</head>
+<body>
+
+    <!-- header -->
+    <div class="global-header">
+        <div class="container">
+            <div class="top-header">
+                <div class="brand-logo">
+                    <a href="{{ url_for('index') }}">Lim</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- login -->
+    <div class="login">
+        <div class="container">
+            <div class="login-content">
+                <form method="POST" class="col">
+                    <header>Login</header>
+                    <div class="lim-input" id="a-username-input">
+                        <span id="span-holder-a-username-input">Username</span>
+                        <input type="text" name="a-username" id="username" class="lim-input-style" required>
+                    </div>
+                    <div class="lim-input" id="a-password-input">
+                        <span id="span-holder-a-password-input">Password</span>
+                        <input type="password" name="a-password" id="password" class="lim-input-style" required>
+                    </div>
+                    <button class="btn" type="submit">
+                        Login
+                        <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px">
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/global.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<div class="head-row">
+    <div class="col">
+        Add New Category
+    </div>
+    <div class="col">
+        <div class="sub">
+            <a href="{{ url_for('category_management') }}">
+                <div class="btn-back">
+                    <span>
+                        Back
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<form action="" method="POST">
+    <div class="col">
+        <div class="row">
+            <h2>Name</h2>
+            <div class="lim-input" id="catename-add">
+                <span>Category Name</span>
+                <input type="text" name="catename" class="lim-input-style" required>
+            </div>
+        </div>
+         <div class="row">
+            <button type="submit" class="btn">Add <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px"></button>
+        </div>
+    </div>
+</form>

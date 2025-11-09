@@ -1,0 +1,15 @@
+{% extends "auth/admin/layouts/base.html" %}
+
+{% block content %}
+    <div class="mgt">
+        {% if page == 'add-product' %}
+            {% include "auth/admin/layouts/adds/add-product.html" %}
+        {% elif page == 'show-product' %}
+            {% include "auth/admin/layouts/shows/show-product.html" %}
+        {% elif page == 'edit-product' %}
+            {% include "auth/admin/layouts/edits/edit-product.html" %}
+        {% else %}
+            {% include "auth/admin/layouts/tables/table-product.html" %}
+        {% endif %}
+    </div>
+{% endblock %}

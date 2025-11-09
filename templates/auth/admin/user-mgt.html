@@ -1,0 +1,15 @@
+{% extends "auth/admin/layouts/base.html" %}
+
+{% block content %}
+    <div class="mgt">
+        {% if page == 'add-user' %}
+            {% include "auth/admin/layouts/adds/add-user.html" %}
+        {% elif page == 'show-user' %}
+            {% include "auth/admin/layouts/shows/show-user.html" %}
+        {% elif page == 'edit-user' %}
+            {% include "auth/admin/layouts/edits/edit-user.html" %}
+        {% else %}
+            {% include "auth/admin/layouts/tables/table-user.html" %}
+        {% endif %}
+    </div>
+{% endblock %}

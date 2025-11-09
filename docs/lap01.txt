@@ -1,0 +1,4 @@
+Lap 01
+
+What is Flask Extension? Why
+What is Flask Migrate? Why

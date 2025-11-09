@@ -1,0 +1,14 @@
+1. Create Project Flask
+2. Config Database
+	- install 	: 	pip install flask-migrate
+	- import 	: 	from flask_sqlalchemy import SQLAlchemy
+				from flask_migrate import Migrate
+	- config app	: 	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.sqlite3'
+				app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+				db = SQLAlchemy(app)
+				migrate = Migrate(app, db)
+	- run		:	flask db init
+				flask db migrate
+	- sqlite	:	database -> data source -> sqlite -> ... find file db in instance inside project
+				test connection -> apply
+	- create table	:	create package models -> create all file table 

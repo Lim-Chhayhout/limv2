@@ -1,0 +1,73 @@
+<div class="head-row">
+    <div class="col">
+        Add New User
+    </div>
+    <div class="col">
+        <div class="sub">
+            <a href="{{ url_for('user_management') }}">
+                <div class="btn-back">
+                    <span>Back</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<form action="" method="POST">
+        <div class="col">
+            <div class="row">
+                <h2>Name</h2>
+                <div class="lim-input" id="username-add">
+                    <span>Name</span>
+                    <input type="text" name="username" id="username-add" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Email</h2>
+                <div class="lim-input" id="email-add">
+                    <span>Email</span>
+                    <input type="email" name="email" id="email-add" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Password</h2>
+                <div class="lim-input" id="password-add">
+                    <span>Password</span>
+                    <input type="password" name="password" id="password-add" class="lim-input-style" required>
+                </div>
+            </div>
+             <div class="row">
+                <button type="submit" class="btn">Add <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px"></button>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <h2>Profile</h2>
+                <div class="image-input">
+                    <span>Upload Profile</span>
+                    <input type="file" id="profile-upload" name="profile" accept="image/*" hidden required>
+                    <img class="pre-image previewImage" src="" alt="Image Preview" style="display: none;">
+                    <div class="btn-browse-image upload"></div>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Role</h2>
+                <div class="lim-input" id="role-add">
+                    <span>Select Role</span>
+                    <select name="role" id="role-add" class="lim-input-style" required>
+                        <option value="admin">Admin</option>
+                        <option value="super">Super Admin</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Status</h2>
+                <div class="lim-input" id="status-add">
+                    <span>Select Status</span>
+                    <select name="status" id="status-add" class="lim-input-style" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>

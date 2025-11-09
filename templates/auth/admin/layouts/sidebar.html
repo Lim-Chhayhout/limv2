@@ -1,0 +1,31 @@
+<div class="sidebar">
+    <div class="logo"></div>
+    <div class="nav">
+        <a href="{{ url_for('dashboard') }}">
+            <div class="row {% if request.path.startswith('/dashboard') %}active{% endif %}">
+                Dashboard
+            </div>
+        </a>
+        <a href="{{ url_for('sale_management') }}">
+            <div class="row {% if request.path.startswith('/sale-management') %}active{% endif %}">
+                Sale
+            </div>
+        </a>
+        <a href="{{ url_for('product_management') }}">
+            <div class="row {% if request.path.startswith('/product-management') %}active{% endif %}">
+                Product
+            </div>
+        </a>
+        <a href="{{ url_for('category_management') }}">
+            <div class="row {% if request.path.startswith('/category-management') %}active{% endif %}">
+                Category
+            </div>
+        </a>
+        <a href="{{ url_for('user_management') }}">
+            <div class="row {% if request.path.startswith('/user-management') %}active{% endif %}">
+                User
+            </div>
+        </a>
+    </div>
+    <div class="version">Version 2</div>
+</div>

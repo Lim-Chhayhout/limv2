@@ -1,0 +1,43 @@
+<div class="head-row">
+    <div class="col">
+        All Category
+    </div>
+    <div class="col">
+        <div class="sub">
+            <div class="search">
+                <div class="icon">
+                    <div class="circle"></div>
+                    <div class="stand"></div>
+                </div>
+                <input type="text" name="search-category" placeholder="Search">
+            </div>
+        </div>
+        <div class="sub">
+            <a href="{{ url_for('category_management_add') }}">
+                <div class="btn">
+                    <span>Add New Category</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<table class="tbl">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="row">
+            <td>Category Name 1</td>
+            <td class="action">
+                <a href="#">
+                    <div class="btn delete">
+                        <span>Delete</span>
+                    </div>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

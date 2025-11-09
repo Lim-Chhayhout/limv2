@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <!--  styles  -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+
+    <!--  fonts  -->
+    {%  include "fonts/roboto-condensed.html" %}
+
+    <!--  icons  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+</head>
+<body>
+   <div class="admin-base">
+        <div>
+            {% include "auth/admin/layouts/sidebar.html" %}
+        </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+   </div>
+
+    <script src="{{ url_for('static', filename='js/global.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
