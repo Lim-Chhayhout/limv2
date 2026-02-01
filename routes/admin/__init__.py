@@ -1,4 +1,5 @@
 from .login import *
+from .logout import *
 from .dashboard import *
 from .product import *
 from .category import *

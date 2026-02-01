@@ -24,34 +24,42 @@
 <table class="tbl">
     <thead>
         <tr>
-            <th>Profile</th>
+            <th class="pd-l">Profile</th>
             <th>Name</th>
+            <th>Email</th>
             <th>Role</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th class="pd-l">Status</th>
         </tr>
     </thead>
-    <tbody class="tbl-body">
-        <tr class="row" data-href="{{ url_for('user_management_show') }}">
-            <td><img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="Product 1" width="50"></td>
-            <td>Lim Chhayhout</td>
-            <td>
-                <div class="role-user">
-                    Admin
-                </div>
-            </td>
-            <td>
-                <div class="status">
-                    Active
-                </div>
-            </td>
-            <td>
-                 <a href="{{ url_for('user_management_edit') }}">
-                    <div class="btn">
-                        <span>Edit</span>
-                    </div>
-                </a>
-            </td>
-        </tr>
+    <tbody class="tbl-user">
+        {% if users|length == 0 %}
+            <tr class="row">
+                <td class="pd-l null-data" colspan="5">No user found!</td>
+            </tr>
+        {% else %}
+            {% for user in users %}
+                <tr class="row" data-href="{{ url_for('user_management_show', user_id=user.id) }}">
+                    <td class="n-pd">
+                        <img src="{{ url_for('static', filename='images/users/' ~ user.profile_pic) }}" alt="Profile" width="50">
+                    </td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <div class="role-user">
+                            {{ user.user_role.name }}
+                        </div>
+                    </td>
+                    <td class="pd-l">
+                        <div class="status">
+                            {% if user.status == "Enable" %}
+                                Active
+                            {% else %}
+                                Inactive
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
     </tbody>
 </table>

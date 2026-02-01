@@ -1,0 +1,31 @@
+<div class="global-slider">
+    <div class="container">
+        <div class="slider">
+            <div class="pointer">
+                {% if poster %}
+                    {% for poster in posters %}
+                        <div class="p"></div>
+                    {% endfor %}
+                {% else %}
+                    <div class="p"></div>
+                    <div class="p"></div>
+                {% endif %}
+            </div>
+            {% if posters %}
+                {% for poster in posters %}
+                    <div class="slide">
+                        <img src="{{ url_for('static', filename='images/posters/' ~ poster.image) }}" alt="{{ poster.name }}">
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='images/posters/default.jpg') }}" alt="No Poster Found!">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='images/posters/default.jpg') }}" alt="No Poster Found!">
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>

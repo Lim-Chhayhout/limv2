@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; color: #333; }
+        h1 { color: #2a2a2a; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .total { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Invoice for Order #{{ order.order_number }}</h1>
+    <p>Hi {{ order.customer.name }},</p>
+    <p>Thank you for your order! Here are the details:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.products_info %}
+            <tr>
+                <td>{{ item.name }} ({{ item.status }})</td>
+                <td>${{ "%.2f"|format(item.price) }}</td>
+                <td>{{ item.qty }}</td>
+                <td>${{ "%.2f"|format(item.subtotal) }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="total">Shipping ({{ order.shipping.type }})</td>
+                <td class="total">${{ "%.2f"|format(order.shipping.cost) }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="total">Total</td>
+                <td class="total">${{ "%.2f"|format(order.total_amount) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Payment Method: {{ order.payment.type }}</p>
+    <p>Shipping Address: {{ order.customer.address }}</p>
+
+    <p>We appreciate your business!</p>
+    <p>Best regards,<br>Lim - Kdmv</p>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<div class="global-option">
+    <div class="container">
+        <div class="option">
+            <button class="search-bar">
+                <i class="fi fi-rr-search"></i>
+            </button>
+            <button class="filter-bar">
+                <i class="fi fi-rr-filter-list"></i>
+            </button>
+            <button class="nav-bar">
+                <i class="fi fi-rr-bars-staggered"></i>
+            </button>
+        </div>
+        <div class="search">
+             <div class="background"></div>
+            <div class="con">
+                <div class="container">
+                    <div class="col">
+                        <div class="search-in">
+                            <i class="fi fi-rr-search"></i>
+                            <input type="text" class="search-input" name="search" placeholder="Search">
+                        </div>
+                        <div class="quick-search">
+                            <h2>Quick Search</h2>
+                            <div class="row quick-list">
+
+                            </div>
+                        </div>
+                        <div class="suggest-search">
+                            <h2>Suggest Search</h2>
+                            <div class="row suggest-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter">
+            <div class="background"></div>
+            <div class="con">
+                <div class="container">
+                    <div class="col">
+                        <a href="{{ url_for('filter_list', filter_by = 'New') }}">
+                            <h1>New</h1>
+                        </a>
+                        <a href="{{ url_for('filter_list', filter_by = 'LikeNew') }}">
+                            <h2>Like New</h2>
+                        </a>
+                        <a href="{{ url_for('filter_list', filter_by = '2ndHand') }}">
+                            <h3>Used</h3>
+                        </a>
+                        <a href="{{ url_for('filter_list', filter_by = 'In-stock') }}">
+                            <h4>In-stock</h4>
+                        </a>
+                        <a href="{{ url_for('filter_list', filter_by = 'Pre-order') }}">
+                            <h5>Pre-order</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav">
+            <div class="background"></div>
+            <div class="con">
+                <div class="container">
+                    <div class="col">
+                        <a href="{{ url_for('about') }}">
+                            <h1>About</h1>
+                        </a>
+                        <a href="{{ url_for('contact') }}">
+                            <h2>Contact</h2>
+                        </a>
+                        <a href="{{ url_for('privacy_policy') }}">
+                            <h3>Privacy Policy</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

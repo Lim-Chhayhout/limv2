@@ -14,17 +14,22 @@
         </div>
     </div>
 </div>
-<form action="" method="POST">
+<form id="category-form" action="{{ url_for('category_management_create_category') }}" method="POST">
     <div class="col">
         <div class="row">
             <h2>Name</h2>
-            <div class="lim-input" id="catename-add">
+            <div class="lim-input">
                 <span>Category Name</span>
-                <input type="text" name="catename" class="lim-input-style" required>
+                <input type="text" name="name" class="lim-input-style" required>
+            </div>
+            <h2>Description</h2>
+            <div class="lim-input">
+                <span>Category Description</span>
+                <input type="text" name="description" class="lim-input-style">
             </div>
         </div>
          <div class="row">
-            <button type="submit" class="btn">Add <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px"></button>
+            <button type="submit" class="btn">Add Category <i class="fi fi-rr-arrow-right"></i></button>
         </div>
     </div>
 </form>

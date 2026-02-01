@@ -1,31 +1,49 @@
 <div class="sidebar">
-    <div class="logo"></div>
-    <div class="nav">
-        <a href="{{ url_for('dashboard') }}">
-            <div class="row {% if request.path.startswith('/dashboard') %}active{% endif %}">
-                Dashboard
-            </div>
-        </a>
-        <a href="{{ url_for('sale_management') }}">
-            <div class="row {% if request.path.startswith('/sale-management') %}active{% endif %}">
-                Sale
-            </div>
-        </a>
-        <a href="{{ url_for('product_management') }}">
-            <div class="row {% if request.path.startswith('/product-management') %}active{% endif %}">
-                Product
-            </div>
-        </a>
-        <a href="{{ url_for('category_management') }}">
-            <div class="row {% if request.path.startswith('/category-management') %}active{% endif %}">
-                Category
-            </div>
-        </a>
-        <a href="{{ url_for('user_management') }}">
-            <div class="row {% if request.path.startswith('/user-management') %}active{% endif %}">
-                User
-            </div>
-        </a>
-    </div>
+    <div class="logo">Limv2</div>
+    {% if user_role == "Superadmin" %}
+        <div class="nav">
+            <a href="{{ url_for('dashboard') }}">
+                <div class="row {% if request.path.startswith('/dashboard') %}active{% endif %}">
+                    <i class="fi fi-rr-stats"></i> Dashboard
+                </div>
+            </a>
+            <a href="{{ url_for('sale_management') }}">
+                <div class="row {% if request.path.startswith('/sale-management') %}active{% endif %}">
+                    <i class="fi fi-rr-point-of-sale-bill"></i> Sale
+                </div>
+            </a>
+            <a href="{{ url_for('product_management') }}">
+                <div class="row {% if request.path.startswith('/product-management') %}active{% endif %}">
+                    <i class="fi fi-rr-box-alt"></i> Product
+                </div>
+            </a>
+            <a href="{{ url_for('category_management') }}">
+                <div class="row {% if request.path.startswith('/category-management') %}active{% endif %}">
+                    <i class="fi fi-rr-boxes"></i> Category
+                </div>
+            </a>
+            <a href="{{ url_for('user_management') }}">
+                <div class="row {% if request.path.startswith('/user-management') %}active{% endif %}">
+                    <i class="fi fi-rr-user"></i> User
+                </div>
+            </a>
+        </div>
+    {% endif %}
+
+    {% if user_role == "Admin" %}
+        <div class="nav">
+            <a href="{{ url_for('product_management') }}">
+                <div class="row {% if request.path.startswith('/product-management') %}active{% endif %}">
+                    <i class="fi fi-rr-box-alt"></i> Product
+                </div>
+            </a>
+            <a href="{{ url_for('category_management') }}">
+                <div class="row {% if request.path.startswith('/category-management') %}active{% endif %}">
+                    <i class="fi fi-rr-boxes"></i> Category
+                </div>
+            </a>
+        </div>
+    {% endif %}
+
     <div class="version">Version 2</div>
 </div>

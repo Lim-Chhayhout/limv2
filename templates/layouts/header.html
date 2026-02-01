@@ -4,16 +4,22 @@
             <div class="brand-logo">
                 <a href="{{ url_for('index') }}">Lim</a>
             </div>
-            <div class="head-nav">
-                <div class="link-cart">
-                    <a href="/cart" class="trigger-cart">
-                        <div></div>
-                        <div class="cart-count">
-                            0
-                        </div>
-                    </a>
+            {% if request.path != "/cart" and request.path != "/about" and request.path != "/contact" and request.path != "/privacy-policy" %}
+                <div class="head-nav">
+                    <div class="link-cart">
+                        <a href="/cart" class="trigger-cart">
+                            <div></div>
+                            <div class="cart-count">
+                                {% if total_qty %}
+                                    {{ total_qty }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 </div>

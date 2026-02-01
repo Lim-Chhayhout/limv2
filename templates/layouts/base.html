@@ -5,13 +5,14 @@
     <title>{{ title }}</title>
 
     <!--  styles  -->
-    {% include "share/style.html" %}
+    {% include "shares/style.html" %}
 
     <!--  fonts  -->
     {%  include "fonts/roboto-condensed.html" %}
 
     <!-- icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-brands/css/uicons-brands.css'>
 
 </head>
 <body>
@@ -21,8 +22,10 @@
         {% block content %}{% endblock %}
     </main>
 
-    {% include "layouts/footer.html" %}
+    {% if request.path != "/cart" and request.path != "/checkout" %}
+        {% include "layouts/footer.html" %}
+    {% endif %}
 
-    {% include "share/js.html" %}
+    {% include "shares/js.html" %}
 </body>
 </html>

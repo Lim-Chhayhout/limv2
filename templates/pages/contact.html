@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+    <div class="contact">
+        <div class="container">
+            <div class="con">
+                <div class="con-head">
+                    <h2>Contact Via Email</h2>
+                    <div class="line"></div>
+                    <p>Send your message to our email.</p>
+                </div>
+                <div class="row">
+                    <form action="{{ url_for('post_contact') }}" method="POST">
+                        <div class="lim-input">
+                            <span>Name</span>
+                            <input type="text" name="name" id="name" class="lim-input-style" required>
+                        </div>
+                        <div class="lim-input">
+                            <span>Email</span>
+                            <input type="email" name="email" id="email" class="lim-input-style" required>
+                        </div>
+                        <div class="lim-input message">
+                            <label>Message</label>
+                            <textarea name="message"></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send <i class="fi fi-rr-arrow-right"></i></button>
+                    </form>
+                </div>
+                <div class="con-head margin">
+                    <h2>Quick Contact</h2>
+                    <div class="line"></div>
+                    <p>Get in touch with us quickly.</p>
+                </div>
+                <div class="row">
+                    <div class="flex">
+                        <div class="col">
+                           <i class="fi fi-rr-messages"></i>
+                            <h4>Chat With Us</h4>
+                            <div class="box">
+                                <a href=""><img src="{{ url_for('static', filename='images/icons/facebook.png') }}" > Facebook</a>
+                                <div class="line"></div>
+                                <a href=""><img src="{{ url_for('static', filename='images/icons/instagram.png') }}" > Instagram</a>
+                                <div class="line"></div>
+                                <a href=""><img src="{{ url_for('static', filename='images/icons/telegram.png') }}" > Telegram</a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <i class="fi fi-rr-phone-call"></i>
+                            <h4>Call With Us</h4>
+                            <div class="box">
+                                <div>(+855) 123445678</div>
+                                <div class="line"></div>
+                                <div>(+855) 123445678</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% include "popups/success-contact.html" %}

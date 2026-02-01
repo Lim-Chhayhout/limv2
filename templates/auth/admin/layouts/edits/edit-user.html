@@ -1,10 +1,19 @@
 <div class="head-row">
     <div class="col">
-        Edit User
+        <div class="tag">{{ user.name if user else 'No User' }}</div>
+        <a href="{{ url_for('user_management_delete_user', user_id=user.id) }}"
+           class="delete-link"
+           data-type="user"
+           data-id="{{ user.id }}"
+           data-redirect="/user-management">
+           <div class="delete">
+               <i class="fi fi-rr-trash"></i>
+           </div>
+        </a>
     </div>
     <div class="col">
         <div class="sub">
-            <a href="{{ url_for('user_management') }}">
+            <a href="{{ url_for('user_management_show', user_id=user.id) }}">
                 <div class="btn-back">
                     <span>Back</span>
                 </div>
@@ -12,62 +21,71 @@
         </div>
     </div>
 </div>
-<form action="" method="POST">
-        <div class="col">
-            <div class="row">
-                <h2>Name</h2>
-                <div class="lim-input" id="username-add">
-                    <span>Name</span>
-                    <input type="text" name="username" id="username-add" class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Email</h2>
-                <div class="lim-input" id="email-add">
-                    <span>Email</span>
-                    <input type="email" name="email" id="email-add" class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Password</h2>
-                <div class="lim-input" id="password-add">
-                    <span>Password</span>
-                    <input type="password" name="password" id="password-add" class="lim-input-style" required>
-                </div>
-            </div>
-             <div class="row">
-                <button type="submit" class="btn">Save <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px"></button>
+<form id="user-form" action="{{ url_for('user_management_update_user', user_id=user.id) }}" method="POST" enctype="multipart/form-data">
+    <div class="col">
+        <div class="row">
+            <h2>Profile</h2>
+            <div class="image-input">
+                <span>Upload Profile</span>
+                <input type="file" id="profile-upload" name="profile_pic" accept="image/*" hidden>
+                <img class="pre-image previewImage"
+                     src="{{ url_for('static', filename='images/users/' ~ (user.profile_pic or 'user_icon.png')) }}"
+                     alt="Image Preview"
+                     style="display: block;">
+                <div class="btn-browse-image upload"></div>
             </div>
         </div>
-        <div class="col">
-            <div class="row">
-                <h2>Profile</h2>
-                <div class="image-input">
-                    <span>Upload Profile</span>
-                    <input type="file" id="profile-upload" name="profile" accept="image/*" hidden required>
-                    <img class="pre-image previewImage" src="" alt="Image Preview" style="display: none;">
-                    <div class="btn-browse-image upload"></div>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Role</h2>
-                <div class="lim-input" id="role-add">
-                    <span>Select Role</span>
-                    <select name="role" id="role-add" class="lim-input-style" required>
-                        <option value="admin">Admin</option>
-                        <option value="super">Super Admin</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Status</h2>
-                <div class="lim-input" id="status-add">
-                    <span>Select Status</span>
-                    <select name="status" id="status-add" class="lim-input-style" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
+    </div>
+
+    <div class="col">
+        <div class="row">
+            <h2>Name</h2>
+            <div class="lim-input" >
+                <span>Name</span>
+                <input type="text" name="name" class="lim-input-style" value="{{ user.name }}" required>
             </div>
         </div>
-    </form>
+        <div class="row">
+            <h2>Email</h2>
+            <div class="lim-input" >
+                <span>Email</span>
+                <input type="email" name="email"  class="lim-input-style" value="{{ user.email }}" required>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Telephone</h2>
+            <div class="lim-input" id="telephone-add">
+                <span>Telephone</span>
+                <input type="text" name="telephone" class="lim-input-style" value="{{ user.telephone }}" required>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Role</h2>
+            <div class="lim-input" >
+                <span>Select Role</span>
+                <select name="role" class="lim-input-style" required>
+                    {% for role in roles %}
+                        <option value="{{ role.id }}" {% if user.role_id == role.id %}selected{% endif %}>
+                            {{ role.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Status</h2>
+            <div class="lim-input">
+                <span>Select Status</span>
+                <select name="status" class="lim-input-style" required>
+                    <option value="Enable" {% if user.status == "Enable" %}selected{% endif %}>Active</option>
+                    <option value="Disable" {% if user.status == "Disable" %}selected{% endif %}>Inactive</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn">
+                Save user <i class="fi fi-rr-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</form>

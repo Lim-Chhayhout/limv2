@@ -12,7 +12,7 @@
     {%  include "fonts/roboto-condensed.html" %}
 
     <!--  icons  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 
 </head>
 <body>
@@ -22,6 +22,20 @@
         </div>
         <div class="content">
             {% block content %}{% endblock %}
+        </div>
+        <div class="system-report">
+            <div class="error box">
+                <i class="fi fi-rr-exclamation"></i>
+                <p class="message"></p>
+            </div>
+            <div class="success box">
+                <i class="fi fi-rr-check-circle"></i>
+                <p class="message"></p>
+            </div>
+            <div class="warning box">
+                <i class="fi fi-rr-triangle-warning"></i>
+                <p class="message"></p>
+            </div>
         </div>
    </div>
 

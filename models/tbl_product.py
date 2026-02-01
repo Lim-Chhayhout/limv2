@@ -47,6 +47,10 @@ class ProductDetail(db.Model):
         nullable=False,
         default='New'
     )
+    status = db.Column(
+        ENUM('In-stock', 'Pre-order', name='detail_status_enum'),
+        nullable=False
+    )
     description = db.Column(db.Text, nullable=True)
     review = db.Column(db.Text, nullable=True)
     image1 = db.Column(db.String(255), nullable=True)

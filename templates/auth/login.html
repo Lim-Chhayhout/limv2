@@ -9,6 +9,10 @@
 
     <!--  fonts  -->
     {%  include "fonts/roboto-condensed.html" %}
+
+    <!--  icons  -->
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+
 </head>
 <body>
 
@@ -27,19 +31,22 @@
     <div class="login">
         <div class="container">
             <div class="login-content">
-                <form method="POST" class="col">
+                <form action="{{ url_for('login_post') }}" method="POST" class="col">
                     <header>Login</header>
-                    <div class="lim-input" id="a-username-input">
-                        <span id="span-holder-a-username-input">Username</span>
-                        <input type="text" name="a-username" id="username" class="lim-input-style" required>
+                    <div class="lim-input">
+                        <span >Email</span>
+                        <input type="email" name="email" id="email" class="lim-input-style" required>
                     </div>
-                    <div class="lim-input" id="a-password-input">
-                        <span id="span-holder-a-password-input">Password</span>
-                        <input type="password" name="a-password" id="password" class="lim-input-style" required>
+                    <div class="lim-input">
+                        <span>Password</span>
+                        <input type="password" name="password" id="password" class="lim-input-style" required>
+                    </div>
+                    <div id="error-login" class="error">
+                        <i class="fi fi-rr-exclamation"></i><span id="error-message"></span>
                     </div>
                     <button class="btn" type="submit">
                         Login
-                        <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px">
+                        <i class="fi fi-rr-arrow-right"></i>
                     </button>
                 </form>
             </div>

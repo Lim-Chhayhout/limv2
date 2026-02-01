@@ -1,16 +1,132 @@
 <div class="head-row">
     <div class="col">
-        Product Name
+        <div class="tag">{{ product.detail.name if product else 'No Product' }}</div>
+        <a href="{{ url_for('product_management_edit', product_id=product.id) }}">
+            <div class="edit"><i class="fi fi-rr-edit"></i></div>
+        </a>
+        <a href="{{ url_for('product_management_delete_product', product_id=product.id) }}"
+           class="delete-link"
+           data-type="product"
+           data-id="{{ product.id }}"
+           data-redirect="/product-management">
+           <div class="delete">
+               <i class="fi fi-rr-trash"></i>
+           </div>
+        </a>
     </div>
     <div class="col">
         <div class="sub">
             <a href="{{ url_for('product_management') }}">
                 <div class="btn-back">
-                    <span>
-                        Back
-                    </span>
+                    <span>Back</span>
                 </div>
             </a>
         </div>
     </div>
 </div>
+
+{% if product %}
+<form>
+    <div class="col">
+         <div class="row">
+            <h2>Code</h2>
+            <div class="lim-input">
+                <span>Product Code</span>
+                <input type="text" name="code" value="{{ product.code or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Brand</h2>
+            <div class="lim-input">
+                <span>Product Brand</span>
+                <input type="text" name="brand" value="{{ product.detail.brand or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Name</h2>
+            <div class="lim-input" >
+                <span>Product name</span>
+                <input type="text" name="name" value="{{ product.detail.name or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Price</h2>
+            <div class="lim-input" >
+                <span>Product Price ($)</span>
+                <input type="number" name="price" value="{{ product.detail.price or '-' }}" class="lim-input-style" step="0.01" min="0" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Discount</h2>
+            <div class="lim-input">
+                <span>Discount (%)</span>
+                <input type="number" name="discount" value="{{ product.detail.discount or '-' }}" class="lim-input-style" step="0.01" min="0" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Description</h2>
+            <textarea name="description" readonly>{{ product.detail.description or '-' }}</textarea>
+        </div>
+        <div class="row">
+            <h2>Product Review</h2>
+            <div class="lim-input" >
+                <span>Link</span>
+                <input type="text" name="review" value="{{ product.detail.review or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="row">
+            <h2>Product Images</h2>
+            <div class="flex">
+                <div class="image-input">
+                    <span class="label-image">Upload Image1</span>
+                    <input type="file" name="image1" accept="image/*" hidden readonly>
+                    <img class="pre-image previewImage" src="{{ url_for('static', filename='images/products/' ~ (product.detail.image1 or 'product_icon.png')) }}" alt="Image Preview" style="display: block;">
+                </div>
+                <div class="image-input">
+                    <span class="label-image">Upload Image2</span>
+                    <input type="file" name="image2" accept="image/*" hidden readonly>
+                    <img class="pre-image previewImage" src="{{ url_for('static', filename='images/products/' ~ (product.detail.image2 or 'product_icon.png')) }}" alt="Image Preview" style="display: block;">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Condition</h2>
+            <div class="lim-input">
+                <span>Condition</span>
+                <input type="text" name="condition" value="{{ product.detail.condition or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Category</h2>
+            <div class="lim-input">
+                <span>Category</span>
+                <input type="text" name="category" value="{{ product.category.name or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Status</h2>
+            <div class="lim-input">
+                <span>Product Status</span>
+                <input type="text" name="product_status" value="{{ product.status or '-' }}" class="lim-input-style" readonly>
+            </div>
+            <div class="lim-input">
+                <span>Select Detail Status</span>
+                <input type="text" name="detail_status" value="{{ product.detail.status or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+        <div class="row" id="row-add-stock">
+            <h2>Quantity Stock</h2>
+            <div class="lim-input">
+                <span>Product Stock</span>
+                <input type="number" name="qty" value="{{ product.stock.qty or '-' }}" class="lim-input-style" readonly>
+            </div>
+        </div>
+    </div>
+</form>
+{% else %}
+<div class="show">
+    <p>Product not found.</p>
+</div>
+{% endif %}

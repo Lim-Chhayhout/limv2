@@ -24,20 +24,34 @@
 <table class="tbl">
     <thead>
         <tr>
-            <th>Name</th>
+            <th class="pd-l">Name</th>
+            <th>Description</th>
             <th>Action</th>
         </tr>
     </thead>
-    <tbody>
-        <tr class="row">
-            <td>Category Name 1</td>
-            <td class="action">
-                <a href="#">
-                    <div class="btn delete">
-                        <span>Delete</span>
-                    </div>
-                </a>
-            </td>
-        </tr>
+    <tbody class="tbl-category">
+        {% if categories|length == 0 %}
+            <tr class="row">
+                <td class="pd-l null-data" colspan="3">No category found!</td>
+            </tr>
+        {% else %}
+            {% for category in categories %}
+                <tr class="row">
+                    <td class="pd-l">{{ category.name }}</td>
+                    <td>{{ category.description | default("-", true) }}</td>
+                    <td class="action pd-r">
+                        <a href="{{ url_for('category_management_delete_category', category_id=category.id) }}"
+                           class="delete-link"
+                           data-type="category"
+                           data-id="{{ category.id }}"
+                           data-redirect="/category-management">
+                           <div class="delete">
+                               <i class="fi fi-rr-trash"></i>
+                           </div>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
     </tbody>
 </table>

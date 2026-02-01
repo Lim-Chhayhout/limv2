@@ -1,0 +1,20 @@
+{% if success %}
+    <div class="pop">
+        <div class="con">
+            <div class="head" style="display: flex; flex-direction: column; align-items: center;">
+                <i style="color: green; font-size: 2rem;" class="fi fi-rr-check-circle"></i>
+                <div class="message" style="color: green;font-size: 1.2rem;">Your Message Delivered!</div>
+            </div>
+            <div class="body">
+                <div class="message" style="text-align: center;">Thank you "{{ success }}" for contacting us. <br> We will respond shortly.</div>
+            </div>
+            <div class="foot">
+                <a href="{{ url_for('contact') }}">
+                    <span class="btn Done">
+                        <i class="fi fi-rr-undo"></i>Done
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endif %}

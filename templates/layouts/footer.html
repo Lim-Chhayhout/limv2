@@ -1,7 +1,42 @@
+<div class="foot-space"></div>
 <div class="global-footer">
     <div class="container">
         <footer>
-            <div class="font-weight-md"></div>
+            <div class="flex">
+                <div class="m">
+                    <h4>Products</h4>
+                    <a href="#">---</a>
+                </div>
+                <div class="m">
+                    <h4>Collections</h4>
+                    <a href="{{ url_for('filter_list', filter_by = 'New') }}">New</a>
+                    <a href="{{ url_for('filter_list', filter_by = 'LikeNew') }}">Like New</a>
+                    <a href="{{ url_for('filter_list', filter_by = 'Used') }}">Used</a>
+                    <a href="{{ url_for('filter_list', filter_by = 'In-stock') }}">In-stock</a>
+                    <a href="{{ url_for('filter_list', filter_by = 'Pre-order') }}">Pre-order</a>
+                </div>
+                <div class="m n-m">
+                    <h4>Lim</h4>
+                    <a href="{{ url_for('about') }}">About Us</a>
+                    <a href="{{ url_for('contact') }}">Contact</a>
+                    <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a>
+                </div>
+                <div class="m n-m">
+                    <h4>Follow Us</h4>
+                    <a href="#" class="a-i">
+                        <i class="fi fi-brands-facebook"></i>
+                    </a>
+                    <a href="#" class="a-i">
+                        <i class="fi fi-brands-instagram"></i>
+                    </a>
+                     <a href="#" class="a-i">
+                        <i class="fi fi-brands-telegram"></i>
+                    </a>
+                </div>
+            </div>
         </footer>
     </div>
+</div>
+<div class="sub-footer">
+    <p>© 2026 limchhayhout.com - All rights reserved.</p>
 </div>

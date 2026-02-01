@@ -2,6 +2,44 @@
 /*                                - lim chhayhout [development] -                            */
 /*                                        login style css                                    */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.null-data {
+    color: #00000050;
+}
+
+.system-report{
+    position: absolute;
+    z-index: 999;
+    right: 1rem;
+    bottom: 1rem;
+    display: none;
+}
+
+.system-report .box{
+    padding: 1rem;
+    border-radius: 5px;
+    gap: 1rem;
+    align-items: center;
+    display: none;
+}
+
+.system-report .error{
+    background-color: #ff0000;
+    color: #ffffff;
+}
+
+.system-report .success{
+    background-color: #0000ff;
+    color: #ffffff;
+}
+
+.system-report .warning{
+    background-color: #ffa300;
+    color: #ffffff;
+}
+
+.system-report .message{
+    color: #ffffff;
+}
 
 .login .login-content{
     width: 100%;
@@ -62,7 +100,7 @@
     left: 0;
     width: 280px;
     height: 100vh;
-    border-right: 1px solid rgba(0, 0, 0, 0.10);
+    border-right: 1px solid #00000010;
     background: #fff;
 }
 
@@ -71,17 +109,21 @@
     align-items: center;
     padding: 0 2rem;
     height: 84px;
-    font-size: 2rem;
+    font-size: 16px;
 }
 
 .admin-base .sidebar .nav .row{
     width: 100%;
     padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #00000080;
 }
 
 .admin-base .sidebar .nav .active{
-    color: #007bff;
-    border-bottom: 1px solid #007bff;
+    color: #000000;
+    border-bottom: 1px solid #000000;
 }
 
 .admin-base .sidebar .version{
@@ -112,12 +154,13 @@
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    border-bottom: 1px solid #00000010;
     padding: 1rem 2rem;
 }
 
 .admin-base .mgt .head-row .col{
     display: flex;
+    align-items: center;
     gap: 1rem;
 }
 
@@ -125,10 +168,8 @@
     height: 48px;
     display: flex;
     align-items: center;
-    padding: 0 1rem;
     gap: 1rem;
-    background: rgba(0, 0, 0, 0.10);
-    border-radius: 5px;
+    border-bottom: 1px solid #000000;
 }
 
 .admin-base .mgt .head-row .col .search .icon{
@@ -141,7 +182,7 @@
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
-    border: 1.5px solid #999999;
+    border: 1.5px solid #000000;
 }
 
 .admin-base .mgt .head-row .col .search .icon .stand{
@@ -150,7 +191,7 @@
     bottom: 0;
     height: 6px;
     width: 1.5px;
-    background-color: #999999;
+    background-color: #000000;
     rotate: -44deg;
 }
 
@@ -159,13 +200,12 @@
     border: none;
     outline: none;
     background: none;
-    font-family: var(--font);
     font-size: 1rem;
-    color: #999999;
+    color: #000000;
 }
 
 input::placeholder{
-    color: #999999;
+    color: #000000;
 }
 
 .admin-base .mgt .flex{
@@ -181,11 +221,12 @@ input::placeholder{
 
 .tbl thead tr th{
     text-align: start;
-    padding: 1rem 2rem;
+    padding: 1rem;
     background-color: rgb(225, 225, 225);
     font-weight: normal;
     border-bottom: #fff solid 1px;
 }
+
 
 .tbl tbody tr{
     border-bottom: 1px solid rgba(0, 0, 0, 0.10);
@@ -196,15 +237,24 @@ input::placeholder{
 }
 
 .tbl tbody tr td{
-    padding: 1rem 2rem;
+    padding: 1rem;
+}
+
+.tbl .pd-l{
+    padding-left: 2rem;
+}
+
+.tbl .pd-r{
+    padding-right: 2rem;
 }
 
 .tbl tbody tr td a{
     display: inline-block;
 }
 
-.tbl tbody tr td a .btn{
-    background-color: #999999 !important;
+.tbl tbody tr .delete{
+    color: #ff0000;
+    font-size: 1.2rem;
 }
 
 .tbl tbody tr .action{
@@ -212,25 +262,27 @@ input::placeholder{
     gap: 1rem;
 }
 
-.tbl tbody tr .action .delete{
-    background-color: red !important;
+.admin-base .mgt .head-row .delete{
+    color: #ff0000;
+    font-size: 1.2rem;
 }
 
 .tbl .role-user{
     color: green;
 }
 
-.tbl .status{
-    color: #007bff;
-}
-
 .tbl .row{
     cursor: pointer;
-    transition: .1s;
+    border-bottom: 1px solid transparent;
 }
 
 .tbl .row:hover{
-    background: rgb(225, 225, 225);
+    border-bottom: 1px solid #000000;
+}
+
+.admin-base .mgt .head-row .edit{
+    color: #0000ff;
+    font-size: 1.2rem;
 }
 
 .btn-back{
@@ -252,14 +304,14 @@ input::placeholder{
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    background: #ffffff;
+    border-bottom: 1px solid #00000010;
 }
 
 .admin-base form .col{
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
     width: 50%;
 }
 
@@ -270,9 +322,15 @@ input::placeholder{
     width: 100%;
 }
 
+.admin-base form .flex{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
 .admin-base form .image-input{
-    width: 145px;
-    height: 145px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     position: relative;
     border: 1px solid #00000050;
     display: flex;
@@ -281,6 +339,13 @@ input::placeholder{
     font-size: 14px;
     border-radius: 5px;
     overflow: hidden;
+    cursor: pointer;
+}
+
+.image-input img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .admin-base form .image-input span{
@@ -291,7 +356,6 @@ input::placeholder{
 .admin-base form #row-add-stock input,
 .admin-base form #row-edit-stock input{
     width: 100%;
-    max-width: 200px;
 }
 
 .admin-base form .pre-image{
@@ -319,7 +383,6 @@ input::placeholder{
 
 .admin-base form .row .lim-input input{
     width: 100%;
-    max-width: 400px;
     border-radius: 5px;
 }
 
@@ -330,7 +393,6 @@ input::placeholder{
 
 .admin-base form .row .lim-input select{
     width: 100%;
-    max-width: 200px;
     height: 48px;
     border-radius: 5px;
     outline: none;
@@ -342,7 +404,6 @@ input::placeholder{
 
 .admin-base form .row textarea{
     width: 100%;
-    max-width: 400px;
     height: 96px;
     outline: none;
     padding: 1rem;
@@ -351,7 +412,7 @@ input::placeholder{
     background: transparent;
     border: 1px solid #00000050;
     border-radius: 5px;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
 }
 
 .admin-base form .row textarea::-webkit-scrollbar {
@@ -361,14 +422,294 @@ input::placeholder{
 .admin-base form .row button[type="submit"] {
     padding: 0 1rem;
     width: 100%;
-    max-width: 200px;
     height: 48px;
     font-size: 1rem;
     background-color: green;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 2rem !important;
 }
 
-/* */
+.n-pd{
+    padding: 0 0 0 1rem !important;
+    display: flex;
+    align-items: center;
+}
+
+.n-pd img{
+    width: 80px;
+    height: 80px;
+}
+
+.pending{
+    color: orange;
+}
+
+.success, .active{
+    color: green;
+}
+
+.admin-base form .col .box{
+    border-radius: 5px;
+    border: 1px solid #00000010;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-base form .col .head-sale{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: #ffffff;
+}
+
+.admin-base form .col .head-sale .summary{
+    width: 100%;
+    padding: 1rem;
+    background-color: #00000010;
+    border: 1px solid #00000020;
+    border-radius: 5px;
+}
+
+.admin-base form .col .head-sale .flex{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: green;
+}
+
+.admin-base form .col .btn-select{
+    height: 48px;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid #00000020;
+    gap: 1rem;
+    cursor: pointer;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.admin-base form .col .half .flex{
+    justify-content: end;
+}
+
+.selected-list{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.selected-list .row {
+    width: 100%;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row !important;
+    overflow: hidden;
+}
+
+.selected-list .row .image{
+    width: 150px;
+    aspect-ratio: 1 / 1;
+}
+
+.selected-list .row .image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.selected-list .row .p-de {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+.selected-list .row .p-de .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: auto !important;
+    overflow: visible;
+}
+
+.selected-list .row .p-de .col .pq {
+    display: flex;
+    position: absolute;
+    bottom: 0.5rem;
+    align-items: center;
+    width: fit-content;
+}
+
+.selected-list .row .p-de .col .pq input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+}
+
+.selected-list .row .p-de .col .pq input::-webkit-inner-spin-button, .cart .flex-width .row .p-de .col .pq input::-webkit-outer-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.selected-list .row .p-de .col .sub-price {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+}
+
+.selected-list .row .p-de .col .sub-price input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: fit-content;
+    font-size: 1rem;
+    text-align: right;
+}
+
+.selected-list .row .p-de .col .remove{
+    cursor: pointer;
+    display: flex;
+    justify-content: end;
+}
+
+.selected-list .row .p-de .col .remove i {
+    font-size: 1.5rem;
+    color: #00000050;
+}
+
+.list-sale-products{
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: #00000010;
+    border-bottom: 1px solid #00000002;
+}
+
+.list-sale-products .card{
+    background-color: #ffffff;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.list-sale-products .card .product-head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-sale-products .card .row{
+    display: flex;
+    flex-direction: column;
+}
+
+.list-sale-products .card .row .product-name{
+    margin: 8px 0;
+}
+
+.list-sale-products .card .row .product-code {
+    font-size: 12px;
+    color: #999999;
+}
+
+.list-sale-products .checkbox button {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #00000050;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-sale-products .checkbox button i{
+    color: #ffffff !important;
+}
+
+.list-sale-products .card.selected .checkbox button {
+    background-color: #000000;
+    border: 1px solid #000000;
+}
+
+.list-sale-products .card.selected{
+    border: 1px solid #000000;
+}
+
+.card .current-price {
+    color: #ff0000;
+    opacity: 50%;
+    text-decoration: line-through;
+}
+
+.card .discount-rate {
+    color: #ff0000;
+}
+
+.no-product {
+    padding: 1rem 2rem;
+}
+
+.show-product-status-pre-ordered{
+    color: orange;
+}
+
+.show-product-status-place-ordered{
+    color: green;
+}
+
+.btn-logout{
+    background-color: #ff0000 !important;
+}
+
+.mgt .overview{
+    width: 100%;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.mgt .overview .container{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mgt .overview .title{
+    font-size: 1rem;
+}
+
+.mgt .overview .row{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.mgt .overview .row .card{
+    border-radius: 5px;
+    border: 1px solid #00000010;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mgt .overview .row .card .head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.mgt .overview .row .card .value{
+    font-size: 1.2rem;
+}

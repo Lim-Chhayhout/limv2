@@ -1,81 +1,108 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-    <div class="cart">
-        <div class="container">
-            <div class="con">
-                <div class="col flex-width">
-                    <div class="head">
-                        <h1>Your cart</h1>
-                        <span>1</span>
-                    </div>
-                    <div class="row">
-                        <div class="image">
-                            <img src="" alt="">
-                        </div>
-                        <div class="p-de">
-                            <div class="col">
-                                <div class="status">
-                                    <div class="status-condition">
-                                        <span class="new">New</span>
-                                    </div>
-                                    <div class="status-stock">
-                                        <span class="in-stock">2 In-stock</span>
-                                    </div>
-                                </div>
-                                <div class="pname">Product name</div>
-                                <div class="pprice">$50.00</div>
-                                <div class="pq">
-                                    <button class="btn-dqty">
-                                        <div></div>
-                                    </button>
-                                    <input type="number" value="1" readonly>
-                                    <button class="btn-iqty">
-                                        <div></div>
-                                        <div></div>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="remove">
-                                    <button>
-                                        <div></div>
-                                        <div></div>
-                                    </button>
-                                </div>
-                                <div class="sub-pprice">
-                                    <input type="text" readonly value="$50.00">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col fixed-width">
-                    <div class="head">
-                        <h1>Cart Summary</h1>
-                    </div>
-                    <div class="cal">
+    {% if cart_list|length == 0 %}
+        <div class="cart empty-cart">
+            <div class="container">
+                <div class="con">
+                    <div class="col">
+                        <h2 class="head">Your cart is empty!</h2>
                         <div class="row">
-                        <div>Item</div>
-                        <div>x1</div>
-                    </div>
-                        <div class="row subtotal">
-                            <div>Subtotal</div>
-                            <div>$50.00</div>
-                        </div>
-                        <div class="row">
-                            <div>Delivery</div>
-                            <div>Calculate on next step.</div>
+                            <a href="{{ url_for('index') }}">
+                                <div class="btn">
+                                    Continue Shopping
+                                    <i class="fi fi-rr-arrow-right"></i>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                    <a href="#">
-                        <div class="btn">
-                            Checkout
-                            <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px">
-                        </div>
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="cart">
+            <div class="container">
+                <div class="con">
+                    <div class="col flex-width">
+                        <h2 class="head">
+                            <div>Your cart</div>
+                            <span>{{ total_qty }}</span>
+                        </h2>
+                        {% for pid, item in cart_list.items() %}
+                            <div class="row">
+                                <a href="{{ url_for('product_detail', product_name=item.name, product_id=pid) }}" class="image">
+                                    <img src="{{ url_for('static', filename='images/products/' ~ item.image) }}" alt="{{ item.name }}" width="100%">
+                                </a>
+                                <div class="p-de">
+                                    <div class="col">
+                                        <div class="name">{{ item.name }}</div>
+                                        {% if item.discount == 0 %}
+                                            <div class="price">${{ '%.2f' % item.current_price }}</div>
+                                        {% else %}
+                                            <div class="current-price">${{ '%.2f' % item.current_price }}</div>
+                                            <div class="price">${{ '%.2f' % item.price }}</div>
+                                        {% endif %}
+                                        <div class="pq">
+                                            <button type="button" class="d-qty">
+                                                <i class="fi fi-rr-minus-small"></i>
+                                            </button>
+
+                                            <input
+                                                type="number"
+                                                value="{{ item.qty }}"
+                                                data-pid="{{ pid }}"
+                                                data-status="{{ item.status }}"
+                                                data-stock="{{ item.stock_qty }}"
+                                                data-price="{{ item.price }}"
+                                                readonly
+                                            >
+
+                                            <button type="button" class="i-qty">
+                                                <i class="fi fi-rr-plus-small"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <a href="{{ url_for('remove_cart', product_id=pid) }}" class="remove">
+                                            <i class="fi fi-rr-cross-small"></i>
+                                        </a>
+                                        <div class="sub-price">
+                                            <input type="text" readonly value="${{ '%.2f' % (item.price * item.qty) }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col fixed-width">
+                        <div class="box">
+                            <h2 class="head">
+                                <span>Cart Summary</span>
+                            </h2>
+                            <div class="cal">
+                                <div class="row">
+                                <div>Item(s)</div>
+                                <div>x{{ total_qty }}</div>
+                            </div>
+                                <div class="row subtotal">
+                                    <div>Subtotal</div>
+                                    <div>${{ '%.2f' % subtotal }}</div>
+                                </div>
+                                <div class="row">
+                                    <div>Delivery</div>
+                                    <div>Calculate on next step.</div>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('checkout') }}">
+                                <div class="btn">
+                                    Checkout
+                                    <i class="fi fi-rr-arrow-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

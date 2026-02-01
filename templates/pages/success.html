@@ -1,0 +1,97 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+    <div class="invoice">
+        <div class="container">
+            <div class="con">
+                <div class="tp">
+                    <div class="box">
+                        <div class="row">
+                            <i class="fi fi-rr-check-circle"></i>
+                        </div>
+                        <div class="row">
+                            <h2>Thank you for your order!</h2>
+                        </div>
+                        <div class="row">
+                            An email confirmation has been sent to <span class="email">{{ customer.email }}</span>
+                        </div>
+                        <div class="row hidden">
+                            <button class="btn" id="download">
+                                Download Invoice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="col flex-width">
+                        <div class="row order-detail">
+                            <div class="in">
+                                <h2>Order Number</h2>
+                                <span>{{ order.order_number }}</span>
+                                <h2>Order Date</h2>
+                                <span>{{ order.created_at }}</span>
+                            </div>
+                        </div>
+                        <div class="row contact-detail">
+                            <h2>Contact</h2>
+                            <div class="in">
+                                <div>{{ customer.name }}</div>
+                                <div>{{ customer.email }}</div>
+                                <div>{{ customer.telephone }}</div>
+                                <div>{{ customer.social or "-" }}</div>
+                            </div>
+                        </div>
+                        <div class="row address-detail">
+                            <h2>Address</h2>
+                            <div class="in">
+                                <div>
+                                    {{ customer.address }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row payment">
+                            <h2>Payment</h2>
+                            <div class="in">
+                                <div>
+                                    <span>{{ payment.type }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col fixed-width">
+                        <div class="summary-box">
+                            <div class="row">
+                                <h2>Total</h2>
+                                <h2>${{order.total_amount}}</h2>
+                            </div>
+                            <div class="line"></div>
+                            <div class="row">
+                                <span>Subtotal</span>
+                                <span>${{ subtotal }}</span>
+                            </div>
+                            <div class="row">
+                                <span>Delivery - {{ shipping.type }}</span>
+                                <span>${{ shipping.cost }}</span>
+                            </div>
+                        </div>
+                        <div class="order-detail">
+                            <h2>Ordered</h2>
+                            {% for item in products_info %}
+                            <div class="card">
+                                <div class="col">
+                                    <div class="row">{{ item.name }} ({{ item.status }})</div>
+                                    <div class="row">${{ "%.2f"|format(item.price) }}</div>
+                                    <div class="row">x{{ item.qty }}</div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">${{ "%.2f"|format(item.subtotal) }}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

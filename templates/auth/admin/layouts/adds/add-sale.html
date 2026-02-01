@@ -1,0 +1,171 @@
+<div class="head-row">
+    <div class="col">
+        Add New Sale
+    </div>
+    <div class="col">
+        <div class="sub">
+            <a href="{{ url_for('cancel_sale') }}">
+                <div class="btn-back">
+                    <span>Cancel</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<form id="add-sale" action="{{ url_for('sale_management_create') }}" method="POST" enctype="multipart/form-data">
+    <div class="col">
+        <div class="box">
+            <div class="row">
+                <h1>Customer</h1>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Name</span>
+                    <input type="text" name="name" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Email</span>
+                    <input type="text" name="email" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Telephone</span>
+                    <input type="text" name="telephone" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Social (Optional)</span>
+                    <input type="text" name="social" class="lim-input-style">
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="row">
+                <h1>Customer Address</h1>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Country</span>
+                    <input type="text" name="country" value="Cambodia" class="lim-input-style" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>City</span>
+                    <input type="text" name="city" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>District</span>
+                    <input type="text" name="district" class="lim-input-style" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Details (Street / Village / House)</span>
+                    <input type="text" name="address_details" class="lim-input-style" required>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="row">
+                <h1>Order Options</h1>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Select Shipping Method</span>
+                    <select name="shipping_id" class="lim-input-style" id="shipping-select">
+                        {% for ship in shipping_methods %}
+                            <option value="{{ ship.id }}" data-cost="{{ ship.cost }}">
+                                {{ ship.type }} (${{
+                                    '%.2f' % ship.cost
+                                }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" id="shipping-cost" value="{{ shipping_methods[0].cost }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Select Payment Method</span>
+                    <select name="payment_id" class="lim-input-style" required>
+                       {% for payment in payment_methods %}
+                            <option value="{{ payment.id }}">{{ payment.type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn">Add Sale <i class="fi fi-rr-arrow-right"></i></button>
+        </div>
+    </div>
+    <div class="col">
+        <div class="head-sale">
+            <div class="row summary">
+                <div class="flex">
+                    <h2>Total</h2>
+                    <h2 class="total">$0.00</h2>
+                </div>
+                <div class="flex">
+                    <h2>Item</h2>
+                    <h2 class="item">x0</h2>
+                </div>
+            </div>
+            <div class="row half">
+                <div class="flex">
+                    <a href="{{ url_for('sale_management_show_products') }}" class="btn-select">
+                        <i class="fi fi-rr-add"></i><span>Select Product</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="selected-list">
+            {% for product in selected_products %}
+                <div class="row">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='images/products/' ~ product.detail.image1) }}" alt="{{ product.detail.name }}" width="100%">
+                    </div>
+                    <div class="p-de">
+                        <div class="col">
+                            <div class="name">{{ product.detail.name }}</div>
+                            <div class="current-price">${{ '%.2f' % (product.detail.price - (product.detail.price * product.detail.discount / 100)) }}</div>
+
+                            <div class="pq">
+                                <button type="button" class="d-qty">
+                                    <i class="fi fi-rr-minus-small"></i>
+                                </button>
+                                <input
+                                    type="number"
+                                    value="{{ product.qty }}"
+                                    data-pcode="{{ product.code }}"
+                                    data-status="{{ product.product_status }}"
+                                    data-stock="{{ product.stock_qty }}"
+                                    data-price="{{ product.price }}"
+                                    readonly
+                                >
+                                <button type="button" class="i-qty">
+                                    <i class="fi fi-rr-plus-small"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <a href="javascript:void(0)" class="remove" data-code="{{ product.code }}">
+                                <i class="fi fi-rr-cross-small"></i>
+                            </a>
+                            <div class="sub-price">
+                                <input type="text" class="sub-price-input" readonly value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</form>

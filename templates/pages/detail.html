@@ -6,55 +6,111 @@
             <div class="con">
                 <div class="col flex-width">
                     <div class="sub-slide">
-                        <div class="slide">
-                            <img src="{{ url_for('static', filename='images/product_icon.png') }}" alt="sub display image">
-                        </div>
-                        <div class="slide">
-                             <img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="sub display image">
-                        </div>
+                        {% if product.detail.image1 == null %}
+                            <div class="slide">
+                                <img src="{{ url_for('static', filename='images/products/product_icon.png') }}" alt="sub display image">
+                            </div>
+                            <div class="slide">
+                                 <img src="{{ url_for('static', filename='images/products/product_icon.png') }}" alt="sub display image">
+                            </div>
+                        {% else %}
+                            <div class="slide">
+                                <img src="{{ url_for('static', filename='images/products/' ~ product.detail.image1) }}" alt="sub display image">
+                            </div>
+                            <div class="slide">
+                                 <img src="{{ url_for('static', filename='images/products/' ~ product.detail.image2) }}" alt="sub display image">
+                            </div>
+                        {% endif %}
                     </div>
-                    <div class="main-slide">
-                        <img id="display-image" src="{{ url_for('static', filename='images/product_icon.png') }}" loading="lazy" alt="display image">
-                    </div>
+                    {% if product.detail.image1 == null %}
+                        <div class="main-slide">
+                            <img id="display-image" src="{{ url_for('static', filename='images/products/product_icon.png') }}" loading="lazy" alt="display image">
+                        </div>
+                    {% else %}
+                        <div class="main-slide">
+                            <img id="display-image" src="{{ url_for('static', filename='images/products/' ~ product.detail.image1) }}" loading="lazy" alt="display image">
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col fixed-width">
                     <div class="row">
                         <div class="status">
-                         <div class="status-condition">
-                             <span class="new">New</span>
-                         </div>
-                         <div class="status-stock">
-                             <span class="pre-order">Pre-order</span>
-                         </div>
-                     </div>
-                    </div>
-                    <div class="row">
-                        <h2 class="pn">Product Name</h2>
-                    </div>
-                    <div class="row">
-                        <h2 class="ps"><span>h23chde</span></h2>
-                    </div>
-                    <div class="row">
-                        <h2 class="pp">$30.00</h2>
-                    </div>
-                    <div class="row pd">
-                        <a href="#">
-                            <div class="btn">
-                                Add to cart <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px">
+                            <div class="status-condition">
+                                 <span>{{ product.detail.condition }}</span>
+                                 <div class="paral"></div>
                             </div>
-                        </a>
+                            <div class="status-stock">
+                                {% if product.detail.status == "In-Stock" %}
+                                    <span>In-Stock</span>
+                                {% elif product.detail.status == "Pre-order" %}
+                                    <span>Pre-order</span>
+                                {% elif product.stock.qty == 0 %}
+                                    <span class="out-stock">
+                                        Out of stock!
+                                    </span>
+                                {% else %}
+                                    <span>In-Stock</span>
+                                {% endif %}
+                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h2 class="ps">{{ product.code }}</h2>
+                    </div>
+                    <div class="row">
+                        <h2 class="pn">{{ product.detail.name }}</h2>
+                    </div>
+                    {% if product.detail.discount == 0 %}
+                        <div class="row">
+                            <h2 class="pp">${{ product.detail.price }}</h2>
+                        </div>
+                    {% else %}
+                        <div class="row flex">
+                            <h2 class="pp op">${{ product.detail.price }}</h2>
+                            <h2 class="pp dr">{{ ('%g' % product.detail.discount) }}% OFF</h2>
+                        </div>
+                        <div class="row">
+                            <div class="pp dp">
+                                ${{ (product.detail.price - (product.detail.price * product.detail.discount / 100)) | round(2) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="row pd">
+                        {% if product.detail.status == "Pre-order" %}
+                             <a href="{{ url_for('post_cart', product_id=product.id) }}" >
+                                <div class="btn">
+                                    Add to cart <i class="fi fi-rr-arrow-right"></i>
+                                </div>
+                             </a>
+                        {% elif product.detail.status == "In-stock" and product.stock.qty >= 1 %}
+                            <a href="{{ url_for('post_cart', product_id=product.id) }}" >
+                                <div class="btn">
+                                    Add to cart <i class="fi fi-rr-arrow-right"></i>
+                                </div>
+                            </a>
+                        {% else %}
+                            <div>
+                                <div class="btn">
+                                    Out of stock!
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         <fieldset>
                             <legend class="ps">Details</legend>
-                            <h2>Review - <a href="#">https://www.tiktok.com/</a></h2>
-                            <h2>Category - <span>Keyboard</span></h2>
-                            <h2>Brand - <span>Aula Keyboard</span></h2>
-                            <h2>Description -  <span>
-                                AULA F75 Pro Mechanical Gaming Keyboard
-                                - High-performance mechanical switches for ultra-responsive keystrokes
-                                - Full RGB backlighting with customizable lighting effects
-                            </span></h2>
+                            {% if product.detail.review %}
+                                <h2>Review - <a href="#">{{ product.detail.review }}</a></h2>
+                            {% endif %}
+                            <h2>Category - <span>{{ product.category.name }}</span></h2>
+                            <h2>Brand - <span>{{ product.detail.brand }}</span></h2>
+                            {% if product.detail.description %}
+                                <h2>Description -
+                                    <span>
+                                        {{ product.detail.description }}
+                                    </span>
+                                </h2>
+                            {% endif %}
                         </fieldset>
                     </div>
                 </div>

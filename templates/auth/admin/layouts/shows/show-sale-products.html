@@ -1,0 +1,66 @@
+<div class="head-row">
+    <div class="col">
+        <div class="sub">
+            <div class="search">
+                <div class="icon">
+                    <div class="circle"></div>
+                    <div class="stand"></div>
+                </div>
+                <input type="text" name="search-sale-product" placeholder="Search">
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="sub">
+            <a href="{{ url_for('sale_management_add') }}">
+                 <div class="btn-back">
+                    <span>Back</span>
+                </div>
+            </a>
+        </div>
+        <div class="sub">
+            <div class="btn save" id="btn-save-selected"><span>Save</span></div>
+        </div>
+    </div>
+</div>
+<div class="list-sale-products">
+    {% for product in products %}
+        <div class="card" data-code="{{ product.code }}">
+            <div class="row">
+                <div class="product-head">
+                    <div class="checkbox">
+                        <button type="button"></button>
+                    </div>
+                    {% if product.detail.status == "Pre-order" %}
+                        <div class="stock">
+                            {{ product.detail.status }}
+                        </div>
+                    {% else %}
+                        <div class="stock">
+                            x{{ product.stock.qty if product.stock else 0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="product-image">
+                    <img class="st-image" src="{{ url_for('static', filename='images/products/' ~ product.detail.image1) }}" width="100%">
+                </div>
+            </div>
+            <div class="row product-details">
+                <div class="product-code">{{ product.code }}</div>
+                <div class="product-name">{{ product.detail.name }}</div>
+                {% if product.detail.discount == 0 %}
+                     <div class="product-price">${{ product.detail.price }}</div>
+                {% else %}
+                    <div class="flex">
+                        <div class="current-price">${{ product.detail.price }}</div>
+                        <div class="discount-rate">{{ ('%g' % product.detail.discount) }}% OFF</div>
+                    </div>
+                    <div class="discount-price">${{ (product.detail.price - (product.detail.price * product.detail.discount / 100)) | round(2) }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div id="selected-products" data-selected='{{ selected_products | tojson }}'></div>
+

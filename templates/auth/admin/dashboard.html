@@ -1,1 +1,63 @@
 {% extends "auth/admin/layouts/base.html" %}
+{% block content %}
+<div class="mgt">
+    <div class="head-row">
+        <div class="col">
+            Dashboard
+        </div>
+        <div class="col">
+            <div class="sub">
+                <a href="{{ url_for('logout') }}">
+                    <div class="btn btn-logout">
+                        <span>Logout</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="overview">
+        <div class="container">
+            <div class="title">Sales Overview</div>
+            <div class="row">
+                <div class="card">
+                    <div class="head">
+                        <h4>Today Sale(s)</h4>
+                        <i class="fi fi-rr-shopping-cart"></i>
+                    </div>
+                    <div class="value">{{ today_sales }}</div>
+                    <div class="duration">{{ today_date }}</div>
+                </div>
+                <div class="card">
+                    <div class="head">
+                        <h4>Total Sales</h4>
+                        <i class="fi fi-rr-shopping-cart"></i>
+                    </div>
+                    <div class="value">{{ total_sales }}</div>
+                    <div class="duration">{{ selling_days }} days</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="title">Products Overview</div>
+            <div class="row">
+                <div class="card">
+                    <div class="head">
+                        <h4>Active Products</h4>
+                        <i class="fi fi-rr-box-open-full"></i>
+                    </div>
+                    <div class="value">{{ active_products }}</div>
+                </div>
+                <div class="card">
+                    <div class="head">
+                        <h4>Total Products</h4>
+                        <i class="fi fi-rr-box-open-full"></i>
+                    </div>
+                    <div class="value">{{ total_products }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

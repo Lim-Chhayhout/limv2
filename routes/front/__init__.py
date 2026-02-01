@@ -2,3 +2,8 @@ from .index import *
 from .detail import *
 from .cart import *
 from .checkout import *
+from .filter import *
+from .success import *
+from .about import *
+from .contact import *
+from .policy import *

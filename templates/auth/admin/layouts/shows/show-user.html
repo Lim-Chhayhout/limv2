@@ -1,16 +1,87 @@
 <div class="head-row">
     <div class="col">
-        User Name
+        <div class="tag">{{ user.name if user else 'No User' }}</div>
+        <a href="{{ url_for('user_management_edit', user_id=user.id) }}">
+            <div class="edit"><i class="fi fi-rr-edit"></i></div>
+        </a>
+        <a href="{{ url_for('user_management_delete_user', user_id=user.id) }}"
+           class="delete-link"
+           data-type="user"
+           data-id="{{ user.id }}"
+           data-redirect="/user-management">
+           <div class="delete">
+               <i class="fi fi-rr-trash"></i>
+           </div>
+        </a>
     </div>
     <div class="col">
         <div class="sub">
             <a href="{{ url_for('user_management') }}">
                 <div class="btn-back">
-                    <span>
-                        Back
-                    </span>
+                    <span>Back</span>
                 </div>
             </a>
         </div>
     </div>
 </div>
+
+{% if user %}
+<form>
+    <div class="col">
+        <div class="row">
+            <h2>Profile</h2>
+            <div class="image-input">
+                <span>Upload Profile</span>
+                <input type="file" id="profile-upload" name="profile_pic" accept="image/*" hidden>
+                <img class="pre-image previewImage"
+                     src="{{ url_for('static', filename='images/users/' ~ (user.profile_pic or 'user_icon.png')) }}"
+                     alt="Image Preview"
+                     style="display: block;">
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="row">
+            <h2>Name</h2>
+            <div class="lim-input" >
+                <span>Name</span>
+                <input type="text" name="name" class="lim-input-style" value="{{ user.name or "-" }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Email</h2>
+            <div class="lim-input" >
+                <span>Email</span>
+                <input type="email" name="email"  class="lim-input-style" value="{{ user.email or "-" }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Telephone</h2>
+            <div class="lim-input" id="telephone-add">
+                <span>Telephone</span>
+                <input type="text" name="telephone" class="lim-input-style" value="{{ user.telephone or "-" }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Role</h2>
+            <div class="lim-input" >
+                <span>Select Role</span>
+                <input type="text" name="role" class="lim-input-style" value="{{ user.user_role.name or "-" }}" readonly>
+            </div>
+        </div>
+
+        <div class="row">
+            <h2>Status</h2>
+            <div class="lim-input">
+                <span>Select Status</span>
+                <input type="text" name="status" class="lim-input-style" value="{{ user.status or "-" }}" readonly>
+            </div>
+        </div>
+    </div>
+</form>
+{% else %}
+<div class="show">
+    <p>User not found.</p>
+</div>
+{% endif %}

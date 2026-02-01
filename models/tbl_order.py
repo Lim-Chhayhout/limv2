@@ -25,8 +25,9 @@ class OrderDetail(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('tbl_order.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('tbl_product.id'), nullable=False)
+    product_price = db.Column(db.Numeric(10, 2), nullable=False)
     qty = db.Column(db.Integer, nullable=False)
-    total_price = db.Column(db.Numeric(10, 2), nullable=False)
+    subtotal = db.Column(db.Numeric(10, 2), nullable=False)
     pre_date = db.Column(db.DateTime, nullable=True)
     product_status = db.Column(
         ENUM('Place-ordered', 'Pre-ordered', name='product_status_enum'),

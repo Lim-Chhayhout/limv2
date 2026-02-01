@@ -1,0 +1,75 @@
+<div class="head-row">
+    <div class="col">
+        All Sales
+    </div>
+    <div class="col">
+        <div class="sub">
+            <div class="search">
+                <div class="icon">
+                    <div class="circle"></div>
+                    <div class="stand"></div>
+                </div>
+                <input type="text" name="search-sale" placeholder="Search">
+            </div>
+        </div>
+        <div class="sub">
+            <a href="{{ url_for('sale_management_add') }}">
+                 <div class="btn">
+                    <span>Add New Sale</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<table class="tbl">
+    <thead>
+        <tr>
+            <th class="pd-l">Date</th>
+            <th>Order Number</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th class="pd-r">Total</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody class="tbl-sale">
+        {% if sales|length == 0 %}
+            <tr class="row">
+                <td class="pd-l null-data" colspan="6">No sale found!</td>
+            </tr>
+        {% else %}
+            {% for sale in sales %}
+                <tr class="row" data-href="{{ url_for('sale_management_show', sale_id=sale.id) }}">
+                    <td class="n-pd" style="padding: 1rem 0 1rem 2rem !important;">{{ sale.created_at.strftime('%d %b %Y') }}</td>
+                    <td>
+{#                        {{ loop.index }} - ({{ sale.id }}) #}
+                        {{ sale.order_number }}
+                    </td>
+                    <td>{{ sale.customer.name }}</td>
+                    <td>
+                        {% if sale.items == 0 %}
+                            No item found!
+                        {% elif sale.items == 1 %}
+                            {{ sale.items }} item
+                        {% else %}
+                            {{ sale.items }} items
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="total">
+                            ${{ '%.2f'|format(sale.total_amount) }}
+                        </div>
+                    </td>
+                    <td class="pd-r">
+                        {% if sale.order_status == "Pending" %}
+                            <div class="pending">{{ sale.order_status }}</div>
+                        {% else %}
+                            <div class="success">{{ sale.order_status }}</div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+

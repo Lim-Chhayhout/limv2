@@ -1,10 +1,19 @@
 <div class="head-row">
     <div class="col">
-        Edit Product
+        <div class="tag">{{ product.detail.name if product else 'No Product' }}</div>
+        <a href="{{ url_for('product_management_delete_product', product_id=product.id) }}"
+           class="delete-link"
+           data-type="product"
+           data-id="{{ product.id }}"
+           data-redirect="/product-management">
+           <div class="delete">
+               <i class="fi fi-rr-trash"></i>
+           </div>
+        </a>
     </div>
     <div class="col">
         <div class="sub">
-            <a href="{{ url_for('product_management') }}">
+            <a href="{{ url_for('product_management_show', product_id=product.id) }}">
                 <div class="btn-back">
                     <span>Back</span>
                 </div>
@@ -12,112 +21,123 @@
         </div>
     </div>
 </div>
-<form action="" method="POST">
-        <div class="col">
-             <div class="row">
-                <h2>Code</h2>
-                <div class="lim-input">
-                    <span>Product Code</span>
-                    <input type="text" name="code" class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Brand</h2>
-                <div class="lim-input">
-                    <span>Product Brand</span>
-                    <input type="text" name="pbrand" class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Name</h2>
-                <div class="lim-input" >
-                    <span>Product name</span>
-                    <input type="text" name="pname" class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Price</h2>
-                <div class="lim-input" >
-                    <span>Product Price</span>
-                    <input type="number" name="price"  class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Discount</h2>
-                <div class="lim-input">
-                    <span>Discount [%]</span>
-                    <input type="number" name="discount"  class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <h2>Description</h2>
-                <textarea name="description" ></textarea>
-            </div>
-            <div class="row">
-                <h2>Product Review</h2>
-                <div class="lim-input" >
-                    <span>Link</span>
-                    <input type="text" name="review" class="lim-input-style" required>
-                </div>
-            </div>
-            <div class="row">
-                <button type="submit" class="btn">Save <img src="{{ url_for('static', filename='images/icons/arrow-right.png') }}" alt='arrow' width="24px"></button>
+<form id="product-form" action="{{ url_for('product_management_update_product', product_id=product.id) }}" method="POST" enctype="multipart/form-data">
+    <div class="col">
+         <div class="row">
+            <h2>Code</h2>
+            <div class="lim-input">
+                <span>Product Code</span>
+                <input type="text" name="code" value="{{ product.code }}" class="lim-input-style" >
             </div>
         </div>
-        <div class="col">
-            <div class="row">
-                <h2>Product Images</h2>
-                <div class="flex">
-                    <div class="image-input">
-                        <span>Upload Image1</span>
-                        <input type="file" id="pimage1-upload" name="pimage1" accept="image/*" hidden required>
-                        <img class="pre-image previewImage1" src="" alt="Image1 Preview" style="display: none;">
-                        <div class="btn-browse-image upload1"></div>
-                    </div>
-                    <div class="image-input">
-                        <span>Upload Image2</span>
-                        <input type="file" id="pimage2-upload" name="pimage2" accept="image/*" hidden required>
-                        <img class="pre-image previewImage2" src="" alt="Image2 Preview" style="display: none;">
-                        <div class="btn-browse-image upload2"></div>
-                    </div>
-                </div>
+        <div class="row">
+            <h2>Brand</h2>
+            <div class="lim-input">
+                <span>Product Brand</span>
+                <input type="text" name="brand" value="{{ product.detail.brand }}" class="lim-input-style" >
             </div>
-            <div class="row">
-                <h2>Condition</h2>
-                <div class="lim-input" >
-                    <span>Select Condition</span>
-                    <select name="pcondition" class="lim-input-style" required>
-                        <option value="New">New</option>
-                        <option value="Used">Used</option>
-                    </select>
-                </div>
+        </div>
+        <div class="row">
+            <h2>Name</h2>
+            <div class="lim-input" >
+                <span>Product name</span>
+                <input type="text" name="name" value="{{ product.detail.name }}" class="lim-input-style" >
             </div>
-            <div class="row">
-                <h2>Category</h2>
-                <div class="lim-input">
-                    <span>Select Category</span>
-                    <select name="category" class="lim-input-style" required>
-                        <option value="1">Keyboard</option>
-                        <option value="2">Mouse</option>
-                    </select>
-                </div>
+        </div>
+        <div class="row">
+            <h2>Price</h2>
+            <div class="lim-input" >
+                <span>Product Price ($)</span>
+                <input type="number" name="price" value="{{ product.detail.price }}" class="lim-input-style" step="0.01" min="0">
             </div>
-            <div class="row">
-                <h2>Status</h2>
-                <div class="lim-input">
-                    <span>Select Status</span>
-                    <select name="pstatus" id="pstatus-edit" class="lim-input-style" required>
-                        <option value="true">In-stock</option>
-                        <option value="false">Pre-order</option>
-                    </select>
-                </div>
+        </div>
+        <div class="row">
+            <h2>Discount</h2>
+            <div class="lim-input">
+                <span>Discount (%)</span>
+                <input type="number" name="discount" value="{{ product.detail.discount }}" class="lim-input-style" step="0.01" min="0">
             </div>
-            <div class="row" id="row-edit-stock">
-                <h2>Quantity Stock</h2>
-                <div class="lim-input">
-                    <span>Product Stock</span>
-                    <input type="number" name="stock" id="stock-edit" class="lim-input-style" required>
+        </div>
+        <div class="row">
+            <h2>Description</h2>
+            <textarea name="description">{{ product.detail.description }}</textarea>
+        </div>
+        <div class="row">
+            <h2>Product Review</h2>
+            <div class="lim-input" >
+                <span>Link</span>
+                <input type="text" name="review" value="{{ product.detail.review }}" class="lim-input-style" >
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn">Save Product <i class="fi fi-rr-arrow-right"></i></button>
+        </div>
+    </div>
+    <div class="col">
+        <div class="row">
+            <h2>Product Images</h2>
+            <div class="flex">
+                <div class="image-input">
+                    <span class="label-image">Upload Image1</span>
+                    <input type="file" name="image1" accept="image/*" hidden>
+                    <img class="pre-image previewImage" src="{{ url_for('static', filename='images/products/' ~ (product.detail.image1 or 'product_icon.png')) }}" alt="Image Preview" style="display: block;">
+                    <div class="btn-browse-image upload"></div>
+                </div>
+                <div class="image-input">
+                    <span class="label-image">Upload Image2</span>
+                    <input type="file" name="image2" accept="image/*" hidden>
+                    <img class="pre-image previewImage" src="{{ url_for('static', filename='images/products/' ~ (product.detail.image2 or 'product_icon.png')) }}" alt="Image Preview" style="display: block;">
+                    <div class="btn-browse-image upload"></div>
                 </div>
             </div>
         </div>
-    </form>
+        <div class="row">
+            <h2>Condition</h2>
+            <div class="lim-input">
+                <span>Select Condition</span>
+                <select name="condition" class="lim-input-style" >
+                    <option value="New" {% if product.detail.condition == 'New' %}selected{% endif %}>New</option>
+                    <option value="LikeNew" {% if product.detail.condition == 'LikeNew' %}selected{% endif %}>LikeNew</option>
+                    <option value="2ndHand" {% if product.detail.condition == '2ndHand' %}selected{% endif %}>2ndHand</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Category</h2>
+            <div class="lim-input">
+                <span>Select Category</span>
+                <select name="category_id" class="lim-input-style" >
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if product.category_id == category.id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Status</h2>
+            <div class="lim-input">
+                <span>Select Product Status</span>
+                <select name="product_status" id="product-status-add" class="lim-input-style">
+                    <option value="Active" {% if product.status == 'Active' %}selected{% endif %}>Active</option>
+                    <option value="Pending" {% if product.status == 'Pending' %}selected{% endif %}>Pending</option>
+                </select>
+            </div>
+            <div class="lim-input">
+                <span>Select Detail Status</span>
+                <select name="detail_status" id="status-add" class="lim-input-style" >
+                    <option value="In-stock" {% if product.detail.status == 'In-stock' %}selected{% endif %}>In-stock</option>
+                    <option value="Pre-order" {% if product.detail.status  == 'Pre-order' %}selected{% endif %}>Pre-order</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" id="row-add-stock">
+            <h2>Quantity Stock</h2>
+            <div class="lim-input">
+                <span>Product Stock</span>
+                <input type="number" name="qty" value="{{ product.stock.qty }}" class="lim-input-style">
+            </div>
+        </div>
+    </div>
+</form>

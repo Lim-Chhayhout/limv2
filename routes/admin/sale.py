@@ -1,10 +1,10 @@
 from app import app
-from flask import render_template
-from flask import request, jsonify
+from flask import render_template, request, jsonify, session, url_for, redirect
 from app import db
-from models import Order, OrderDetail, Customer, ShippingMethod, Product, PaymentMethod
+from models import Order, OrderDetail, Customer, ShippingMethod, Product, PaymentMethod, ProductDetail, ProductStock
 from utils.timezone import PhnomPenhTime
-
+from middleware.jwt import jwt_required
+from sqlalchemy import and_, or_
 # ===============================================================================================================
 # api with backend (postman)
 # ===============================================================================================================
@@ -410,28 +410,494 @@ def sale_management_update_json(order_id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-@app.post("/sale-management/delete-json/<int:order_id>")
-def sale_management_delete_json(order_id):
+@app.post("/sale-management/delete-json/<int:sale_id>")
+def sale_management_delete(sale_id):
     try:
-        order = db.session.query(Order).get(order_id)
+        order = db.session.query(Order).get(sale_id)
         if not order:
-            return jsonify({"error": f"Order ID {order_id} not found"}), 404
+            return jsonify({"error": f"Order ID {sale_id} not found"}), 404
 
-        db.session.query(OrderDetail).filter_by(order_id=order.id).delete()
         db.session.delete(order)
         db.session.commit()
 
         return jsonify({
-            "message": f"Order ID {order_id} deleted successfully"
+            "success": f"Order ID {sale_id} deleted successfully"
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ===============================================================================================================
+# api with front (page)
+# ===============================================================================================================
+
+def validate_session_products():
+    selected_codes = session.get("selected_products", [])
+    sale_qty = session.get("sale_qty", {})
+
+    if not selected_codes:
+        return []
+
+    products = (
+        db.session.query(Product)
+        .join(ProductDetail)
+        .join(ProductStock, isouter=True)
+        .filter(Product.code.in_(selected_codes))
+        .filter(Product.status == "Active")
+        .filter(
+            or_(
+                ProductDetail.status == "Pre-order",
+                and_(ProductDetail.status == "In-stock", ProductStock.qty > 0)
+            )
+        )
+        .all()
+    )
+
+    code_to_product = {str(p.code): p for p in products}
+
+    valid_codes = list(code_to_product.keys())
+    removed_codes = [c for c in selected_codes if c not in valid_codes]
+    for code in removed_codes:
+        selected_codes.remove(code)
+        sale_qty.pop(code, None)
+
+    session["selected_products"] = selected_codes
+    session["sale_qty"] = sale_qty
+    session.modified = True
+
+    result = []
+    for code in reversed(selected_codes):
+        product = code_to_product.get(str(code))
+        if product:
+            product.qty = sale_qty.get(product.code, 1)
+            product.price = product.detail.price - (product.detail.price * product.detail.discount / 100)
+            product.stock_qty = product.stock.qty if product.stock else 0
+            product.product_status = product.detail.status
+            result.append(product)
+
+    return result
+
+
+@app.route("/sale-management")
+@jwt_required(roles=["Superadmin"])
+def sale_management(role):
+    sales = db.session.query(Order).order_by(Order.created_at.desc()).all()
+    for sale in sales:
+        sale.items = sum(d.qty for d in sale.order_details)
+    return render_template(
+        "auth/admin/sale-mgt.html",
+        user_role=role,
+        sales=sales,
+        title="LIM - Sale Management"
+    )
+
+
+@app.route("/sale-management/show-sale/<int:sale_id>")
+@jwt_required(roles=["Admin", "Superadmin"])
+def sale_management_show(sale_id, role):
+    sale = db.session.query(Order).get(sale_id)
+    if not sale:
+        return "Order not found", 404
+
+    shipped = db.session.query(ShippingMethod).filter(ShippingMethod.id == sale.shipping_id).first()
+    paid = db.session.query(PaymentMethod).filter(PaymentMethod.id == sale.payment_id).first()
+
+    shipping_methods = db.session.query(ShippingMethod).filter_by(status="Active").all()
+    payment_methods = db.session.query(PaymentMethod).filter_by(status="Active").all()
+
+    order_details_with_product = []
+    for detail in sale.order_details:
+        product_detail = db.session.query(ProductDetail).filter_by(product_id=detail.product_id).first()
+        order_details_with_product.append({ "detail": detail, "product_detail": product_detail })
+
+    return render_template(
+        "auth/admin/sale-mgt.html",
+        user_role=role,
+        title=f"LIM - Show {sale.order_number}",
+        page="show-sale",
+        sale=sale,
+        shipped=shipped,
+        paid=paid,
+        order_details=order_details_with_product,
+        shipping_methods=shipping_methods,
+        payment_methods=payment_methods
+    )
+
+
+
+@app.route("/sale-management/add-sale")
+@jwt_required(roles=["Admin", "Superadmin"])
+def sale_management_add(role):
+    selected_products = validate_session_products()
+
+    shipping_methods = (
+        db.session.query(ShippingMethod)
+        .filter(ShippingMethod.status == "Active")
+        .all()
+    )
+
+    payment_methods = (
+        db.session.query(PaymentMethod)
+        .filter(PaymentMethod.status == "Active")
+        .all()
+    )
+
+    return render_template(
+        "auth/admin/sale-mgt.html",
+        title="LIM - Add Sale",
+        page="add-sale",
+        user_role=role,
+        selected_products=selected_products,
+        shipping_methods=shipping_methods,
+        payment_methods = payment_methods
+    )
+
+@app.route("/sale-management/edit-sale/<int:sale_id>")
+@jwt_required(roles=["Admin", "Superadmin"])
+def sale_management_edit(sale_id, role):
+    sale = db.session.query(Order).get(sale_id)
+    if not sale:
+        return "Order not found", 404
+
+    shipped = db.session.query(ShippingMethod).filter(ShippingMethod.id == sale.shipping_id).first()
+    paid = db.session.query(PaymentMethod).filter(PaymentMethod.id == sale.payment_id).first()
+
+    shipping_methods = db.session.query(ShippingMethod).filter_by(status="Active").all()
+    payment_methods = db.session.query(PaymentMethod).filter_by(status="Active").all()
+
+    order_details_with_product = []
+    for detail in sale.order_details:
+        product_detail = db.session.query(ProductDetail).filter_by(product_id=detail.product_id).first()
+        order_details_with_product.append({"detail": detail, "product_detail": product_detail})
+
+    return render_template(
+        "auth/admin/sale-mgt.html",
+        user_role=role,
+        title="LIM - Edit",
+        page="edit-sale",
+        sale = sale,
+        shipped=shipped,
+        paid=paid,
+        order_details=order_details_with_product,
+        shipping_methods=shipping_methods,
+        payment_methods = payment_methods
+    )
+
+@app.route("/sale-management/show-sale-products")
+@jwt_required(roles=["Admin", "Superadmin"])
+def sale_management_show_products(role):
+    selected_products = session.get("selected_products", [])
+
+    products = (
+        db.session.query(Product)
+        .join(ProductDetail)
+        .join(ProductStock, isouter=True)
+        .filter(Product.status == "Active")
+        .filter(
+            or_(
+                ProductDetail.status == "Pre-order",
+                and_(ProductDetail.status == "In-stock", ProductStock.qty > 0)
+            )
+        )
+        .order_by(Product.code.asc())
+        .all()
+    )
+
+    return render_template(
+        "auth/admin/sale-mgt.html",
+        user_role=role,
+        title="LIM - Show products",
+        page="show-sale-products",
+        products=products,
+        selected_products=selected_products
+    )
+
+@app.route("/sale-management/save-selected-products", methods=["POST"])
+@jwt_required(roles=["Admin", "Superadmin"])
+def save_selected_products(role):
+    data = request.json
+    selected_codes = [str(c) for c in data.get("selected_codes", [])]
+
+    sale_qty = session.get("sale_qty", {})
+
+    sale_qty = {code: qty for code, qty in sale_qty.items() if code in selected_codes}
+
+    for code in selected_codes:
+        sale_qty.setdefault(code, 1)
+
+    session["selected_products"] = selected_codes
+    session["sale_qty"] = sale_qty
+    session.modified = True
+
+    return jsonify({
+        "status": "success",
+        "redirect_url": url_for("sale_management_add")
+    })
+
+
+@app.route("/sale-management/remove-product/<product_code>", methods=["POST"])
+@jwt_required(roles=["Admin", "Superadmin"])
+def remove_product_sale(role, product_code):
+    product_code = str(product_code)
+    selected_codes = session.get("selected_products", [])
+    sale_qty = session.get("sale_qty", {})
+
+    if product_code in selected_codes:
+        selected_codes.remove(product_code)
+    sale_qty.pop(product_code, None)
+
+    session["selected_products"] = selected_codes
+    session["sale_qty"] = sale_qty
+    session.modified = True
+
+    return jsonify({"status": "success", "removed": product_code})
+
+
+@app.route("/sale-management/update-product-qty/<product_code>", methods=["POST"])
+@jwt_required(roles=["Admin", "Superadmin"])
+def update_product_qty(role, product_code):
+    data = request.json
+    action = data.get("action")
+    selected_codes = session.get("selected_products", [])
+
+    if product_code not in selected_codes:
+        return jsonify({"status": "error", "message": "Product not in selection"}), 400
+
+    if "sale_qty" not in session:
+        session["sale_qty"] = {}
+    qty = session["sale_qty"].get(product_code, 1)
+
+    product = (
+        db.session.query(Product)
+        .join(ProductDetail)
+        .join(ProductStock, isouter=True)
+        .filter(Product.code == product_code)
+        .first()
+    )
+
+    if not product:
+        return jsonify({"status": "error", "message": "Product not found"}), 404
+
+    max_qty = 10 if product.detail.status == "Pre-order" else (product.stock.qty if product.stock else 0)
+
+    if action == "increase" and qty < max_qty:
+        qty += 1
+    elif action == "decrease" and qty > 1:
+        qty -= 1
+
+    session["sale_qty"][product_code] = qty
+    session.modified = True
+
+    return jsonify({
+        "status": "success",
+        "qty": qty,
+        "stock": product.stock.qty if product.stock else 0,
+        "product_status": product.detail.status
+    })
+
+
+@app.route("/sale-management/cancel-sale", methods=["GET", "POST"])
+@jwt_required(roles=["Admin", "Superadmin"])
+def cancel_sale(role):
+    session.pop("selected_products", None)
+    session.pop("sale_qty", None)
+    session.modified = True
+    return redirect(url_for("sale_management"))
+
+
+@app.post("/sale-management/create-sale")
+@jwt_required(roles=["Admin", "Superadmin"])
+def sale_management_create(role):
+    try:
+        form = request.form
+
+        name = form.get("name")
+        email = form.get("email")
+        telephone = form.get("telephone")
+        country = form.get("country")
+        city = form.get("city")
+        district = form.get("district")
+        address_details = form.get("address_details")
+        social = form.get("social")
+        payment_id = form.get("payment_id")
+        shipping_id = form.get("shipping_id")
+
+        if not all([name, telephone, address_details, payment_id, shipping_id]):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        customer_address = f"{address_details}, {district}, {city}, {country}."
+
+        customer = db.session.query(Customer).filter_by(telephone=telephone).first()
+        if customer:
+            customer.name = name
+            customer.email = email
+            customer.address = customer_address
+            customer.social = social
+            customer.updated_at = PhnomPenhTime.now()
+        else:
+            customer = Customer(
+                name=name,
+                email=email,
+                telephone=telephone,
+                address=customer_address,
+                social=social,
+                created_at=PhnomPenhTime.now()
+            )
+            db.session.add(customer)
+        db.session.flush()
+
+        payment = db.session.query(PaymentMethod).get(payment_id)
+        shipping = db.session.query(ShippingMethod).get(shipping_id)
+        if not payment or not shipping:
+            return jsonify({"error": "Invalid payment or shipping"}), 400
+
+        selected_codes = session.get("selected_products", [])
+        sale_qty = session.get("sale_qty", {})
+
+        if not selected_codes:
+            return jsonify({"error": "No products selected"}), 400
+
+        total_products = 0
+        order_details = []
+        has_preorder = False
+
+        for code in selected_codes:
+            qty = int(sale_qty.get(code, 1))
+
+            product = (
+                db.session.query(Product)
+                .join(ProductDetail)
+                .join(ProductStock, isouter=True)
+                .filter(Product.code == code)
+                .first()
+            )
+            if not product:
+                return jsonify({"error": f"Product {code} not found"}), 400
+
+            price = float(product.detail.price)
+            discount = float(product.detail.discount or 0)
+            final_price = price - (price * discount / 100)
+            subtotal = final_price * qty
+            total_products += subtotal
+
+            stock = product.stock.qty if product.stock else 0
+
+            if product.detail.status == "Pre-order" or stock < qty:
+                product_status = "Pre-ordered"
+                pre_date = PhnomPenhTime.now()
+                has_preorder = True
+            else:
+                product_status = "Place-ordered"
+                pre_date = None
+                if product.stock:
+                    product.stock.qty -= qty
+
+            order_details.append({
+                "product_id": product.id,
+                "product_price": final_price,
+                "qty": qty,
+                "subtotal": subtotal,
+                "pre_date": pre_date,
+                "product_status": product_status
+            })
+
+        total_amount = total_products + float(shipping.cost)
+
+        order_status = "Pending" if has_preorder else "Success"
+
+        order = Order(
+            order_number=f"ORD-{int(PhnomPenhTime.now().timestamp())}",
+            customer_id=customer.id,
+            payment_id=payment.id,
+            shipping_id=shipping.id,
+            total_amount=total_amount,
+            order_status=order_status,
+            created_at=PhnomPenhTime.now()
+        )
+        db.session.add(order)
+        db.session.flush()
+
+
+        for od in order_details:
+            db.session.add(OrderDetail(
+                order_id=order.id,
+                product_id=od["product_id"],
+                product_price=od["product_price"],
+                qty=od["qty"],
+                subtotal=od["subtotal"],
+                pre_date=od["pre_date"],
+                product_status=od["product_status"]
+            ))
+
+        db.session.commit()
+
+        session.pop("selected_products", None)
+        session.pop("sale_qty", None)
+        session.modified = True
+
+        return jsonify({
+            "success": "Sale created successfully",
+            "order_id": order.id,
         }), 200
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-# ===============================================================================================================
-# api with front (page)
-# ===============================================================================================================
-@app.route("/sale-management")
-def sale_management():
-    return render_template("auth/admin/sale-mgt.html", title="LIM - Sale Management")
+@app.post("/sale-management/update-sale/<int:sale_id>")
+@jwt_required(roles=["Admin", "Superadmin"])
+def sale_management_update(sale_id, role):
+    try:
+        sale = db.session.query(Order).get(sale_id)
+        if not sale:
+            return jsonify({"error": "Sale not found"}), 404
+
+        form = request.form
+        name = form.get("name")
+        email = form.get("email")
+        telephone = form.get("telephone")
+        address = form.get("address")
+        social = form.get("social")
+        payment_id = form.get("payment_id")
+        shipping_id = form.get("shipping_id")
+        order_status = form.get("sale_status")
+
+        if not all([name, telephone, address, payment_id, shipping_id, order_status]):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        updated = False
+
+        customer = sale.customer
+        if (customer.name != name or customer.email != email or
+            customer.telephone != telephone or customer.address != address or
+            customer.social != social):
+            customer.name = name
+            customer.email = email
+            customer.telephone = telephone
+            customer.address = address
+            customer.social = social
+            customer.updated_at = PhnomPenhTime.now()
+            updated = True
+
+        if sale.payment_id != int(payment_id):
+            sale.payment_id = int(payment_id)
+            updated = True
+
+        if sale.shipping_id != int(shipping_id):
+            sale.shipping_id = int(shipping_id)
+            updated = True
+
+        if sale.order_status != order_status:
+            sale.order_status = order_status
+            updated = True
+
+        if updated:
+            sale.updated_at = PhnomPenhTime.now()
+            db.session.commit()
+            return jsonify({"success": "Sale updated successfully", "sale_id": sale.id}), 200
+        else:
+            return jsonify({"warning": "No changes detected, nothing to update", "sale_id": sale.id}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+

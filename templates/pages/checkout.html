@@ -1,0 +1,138 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+    <div class="checkout">
+        <div class="container">
+            <div class="con">
+                <form action="{{ url_for('checkout_post') }}" class="col flex-width" method="post" id="checkout-form">
+                    <div class="row">
+                        <h2>Contact</h2>
+                        <div class="lim-input lg">
+                            <span>Email</span>
+                            <input id="email" type="email" name="email" class="lim-input-style">
+                        </div>
+                        <div class="flex">
+                            <div class="lim-input lg">
+                                <span>Phone Number (+855)</span>
+                                <input id="phone" type="number" name="phone" class="lim-input-style">
+                            </div>
+                            <div class="lim-input lg">
+                                <span>Social Media (Optional)</span>
+                                <input type="text" name="social" class="lim-input-style">
+                            </div>
+                        </div>
+                        <div class="lim-input lg">
+                            <span>Name</span>
+                            <input id="name" type="text" name="name" class="lim-input-style">
+                        </div>
+                    </div>
+                    <div class="error-msg" id="error-contact">
+                        <i class="fi fi-rr-triangle-warning"></i>
+                        <span></span>
+                    </div>
+                    <div class="row">
+                        <h2>Address</h2>
+                        <div class="lim-input lg">
+                            <span>Country</span>
+                            <input type="text" name="country" class="lim-input-style" value="Cambodia" required readonly>
+                        </div>
+                        <div class="flex">
+                            <div class="lim-selection lg" id="city-input">
+                                <span id="span-holder-city">City/Province</span>
+                                <div class="lim-selection-box" id="city-box">
+                                    <input type="hidden" name="city" id="hidden-city-selected">
+                                    <span id="selected-city"></span>
+                                    <span class="dropdown-icon">▼</span>
+                                </div>
+                                <div class="lim-selection-style" id="city-dropdown"></div>
+                            </div>
+                            <div class="lim-selection lg" id="district-input">
+                                <span id="span-holder-dis">District/Khan</span>
+                                <div class="lim-selection-box" id="district-box">
+                                    <input type="hidden" name="district" id="hidden-district-selected" >
+                                    <span id="selected-district"></span>
+                                    <span class="dropdown-icon">▼</span>
+                                </div>
+                                <div class="lim-selection-style" id="district-dropdown"></div>
+                            </div>
+                        </div>
+                        <div class="lim-input lg">
+                            <span id="span-holder-address">Details (Street / Village / House)</span>
+                            <input id="address" type="text" name="address" class="lim-input-style" >
+                        </div>
+                    </div>
+                    <div class="error-msg" id="error-address">
+                        <i class="fi fi-rr-triangle-warning"></i>
+                        <span></span>
+                    </div>
+                    <div class="row">
+                        <h2>Payment</h2>
+                        <div class="lim-option-payment">
+                            <div class="option-con-payment" data-value="1">
+                                <div class="branding-payment">
+                                    <img src="{{ url_for('static', filename='images/icons/ic_ABA-PAY_3x.png') }}" width="60px" alt="logo aba pay">
+                                    <div class="title">ABA PAY</div>
+                                </div>
+                                <div class="description">Scan to pay with aba app</div>
+                            </div>
+                            <div class="option-con-payment" data-value="2">
+                                <div class="branding-payment">
+                                    <img src="{{ url_for('static', filename='images/icons/KHQR icon.png') }}" width="60px" alt="logo khqr">
+                                    <div class="title">KHQR</div>
+                                </div>
+                                <div class="description">Scan to pay with khqr</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="payment" id="payment-method">
+                    </div>
+                    <div class="error-msg" id="error-payment">
+                        <i class="fi fi-rr-triangle-warning"></i>
+                        <span></span>
+                    </div>
+                    <div style="color: blue;">Order will be completed without payment, as payment is not available in the demo.</div>
+                    <div class="row">
+                        <button type="submit" class="btn">
+                            Complete Order
+                            <i class="fi fi-rr-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="col fixed-width">
+                    <div class="summary-box">
+                        <h2 class="row">
+                            <span>Amount to Pay</span>
+                            <span class="amount-to-pay">$<span id="total">{{ '%.2f' % subtotal }}</span></span>
+                        </h2>
+                        <div class="row">
+                            <div>Subtotal</div>
+                            <div class="subtotal">${{ '%.2f' % subtotal }}</div>
+                        </div>
+                        <div class="row">
+                            <div>Delivery | <span id="delivery-type">Please select your city.</span></div>
+                            <div class="delivery-cost">$<span id="delivery-cost">0.00</span></div>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <h2 class="row">
+                            <span>Order item (<span>{{ total_qty }}</span>)</span>
+                        </h2>
+                        {% for pid, item in cart.items() %}
+                            <div class="row card">
+                                <span class="p-qty">x{{ item.qty }}</span>
+                                <div class="p-image">
+                                    <img src="{{ url_for('static', filename='images/products/' ~ item.image) }}" alt="{{ item.name }}" width="100%">
+                                </div>
+                                <div class="details">
+                                    <div class="p-name">{{ item.name }}</div>
+                                    <div class="p-price">${{ '%.2f' % item.price }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% include "popups/alert-checkout.html" %}
+

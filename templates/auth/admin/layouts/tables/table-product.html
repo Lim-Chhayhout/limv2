@@ -24,32 +24,40 @@
 <table class="tbl">
     <thead>
         <tr>
-            <th>Image</th>
+            <th class="pd-l">Image</th>
             <th>Code</th>
             <th>Name</th>
             <th>Price</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th class="pd-r">Status</th>
         </tr>
     </thead>
-    <tbody>
-        <tr class="row" data-href="{{ url_for('product_management_show') }}">
-            <td><img src="{{ url_for('static', filename='images/product_icon.png') }}" alt="Product 1" width="50"></td>
-            <td>PRD002</td>
-            <td>Product Name 1</td>
-            <td>$25.00</td>
-            <td>
-                <div class="status">
-                    In-stock
-                </div>
-            </td>
-            <td>
-                <a href="{{ url_for('product_management_edit') }}">
-                    <div class="btn">
-                        <span>Edit</span>
-                    </div>
-                </a>
-            </td>
-        </tr>
+    <tbody class="tbl-product">
+        {% if products|length == 0 %}
+            <tr class="row">
+                <td class="pd-l null-data" colspan="5">No product found!</td>
+            </tr>
+        {% else %}
+            {% for product in products %}
+                <tr class="row" data-href="{{ url_for('product_management_show', product_id=product.id) }}">
+                    <td class="n-pd">
+                        {% if product.detail.image1 %}
+                            <img src="{{ url_for('static', filename='images/products/' ~ product.detail.image1) }}" width="50">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/products/product_icon.png') }}" width="50">
+                        {% endif %}
+                    </td>
+                    <td>{{ product.code }}</td>
+                    <td>{{ product.detail.name }}</td>
+                    <td>${{ '%.2f'|format(product.detail.price) }}</td>
+
+                    <td class="pd-r">
+                        <div class="status {{ 'pending' if product.status == 'Pending' else 'active' }}">
+                            {{ product.status }}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
     </tbody>
 </table>
+

@@ -1,86 +1,53 @@
 <div class="list category">
     <div class="container">
         <div class="head con">
-            <h2>Category</h2>
-            <span>4</span>
+            <h2>Related - {{ product.category.name }}</h2>
+            <span>{{ products|length }}</span>
         </div>
         <div class="grid-list con">
-            <a class="card" href="">
-                 <div class="status">
-                     <div class="status-condition">
-                         <span class="new">New</span>
-                     </div>
+            {% for product in products %}
+            <a class="card" href="{{ url_for('product_detail', product_name=product.detail.name, product_id=product.id) }}">
+                <div class="status">
+                    <div class="status-condition">
+                        <span>{{ product.detail.condition }}</span>
+                        <div class="paral"></div>
+                    </div>
                      <div class="status-stock">
-                         <span class="pre-order">Pre-order</span>
+                        {% if product.detail.status == "Pre-order"%}
+                            <span>Pre-order</span>
+                        {% elif product.detail.status == "In-stock" and product.stock.qty > 0  %}
+                            <span>In-Stock</span>
+                        {% else %}
+                            <span class="out-stock">
+                                Out of stock!
+                            </span>
+                        {% endif %}
                      </div>
-                 </div>
-                 <div class="product-image">
-                     <img class="st-image" >
-                     <img class="nd-image" >
-                 </div>
-                 <div class="row product-details">
-                     <div class="product-name">Product 4</div>
-                     <div class="product-code">093h434</div>
-                     <div class="product-price">$12.00</div>
-                 </div>
+                </div>
+                <div class="product-image">
+                    {% if product.detail.image1 %}
+                        <img class="st-image" src="{{ url_for('static', filename='images/products/' ~ product.detail.image1) }}">
+                        <img class="nd-image" src="{{ url_for('static', filename='images/products/' ~ product.detail.image2) }}">
+                    {% else %}
+                        <img class="st-image" src="{{ url_for('static', filename='images/products/product_icon.png') }}">
+                        <img class="nd-image" src="{{ url_for('static', filename='images/products/product_icon.png') }}">
+                    {% endif %}
+                </div>
+                <div class="row product-details">
+                    <div class="product-code">{{ product.code }}</div>
+                    <div class="product-name">{{ product.detail.name }}</div>
+                    {% if product.detail.discount == 0 %}
+                        <div class="product-price">${{ product.detail.price }}</div>
+                    {% else %}
+                        <div class="flex">
+                            <div class="current-price">${{ product.detail.price }}</div>
+                            <div class="discount-rate">{{ ('%g' % product.detail.discount) }}% OFF</div>
+                        </div>
+                        <div class="discount-price">${{ (product.detail.price - (product.detail.price * product.detail.discount / 100)) | round(2) }}</div>
+                    {% endif %}
+                </div>
             </a>
-            <a class="card" href="">
-                 <div class="status">
-                     <div class="status-condition">
-                         <span class="new">New</span>
-                     </div>
-                     <div class="status-stock">
-                         <span class="in-stock">2 In-stock</span>
-                     </div>
-                 </div>
-                 <div class="product-image">
-                     <img class="st-image" >
-                     <img class="nd-image" >
-                 </div>
-                 <div class="row product-details">
-                     <div class="product-name">Product 4</div>
-                     <div class="product-code">h947434</div>
-                     <div class="product-price">$12.00</div>
-                 </div>
-            </a>
-            <a class="card" href="">
-                 <div class="status">
-                     <div class="status-condition">
-                         <span class="new">New</span>
-                     </div>
-                     <div class="status-stock">
-                         <span class="in-stock">2 In-stock</span>
-                     </div>
-                 </div>
-                 <div class="product-image">
-                     <img class="st-image" >
-                     <img class="nd-image" >
-                 </div>
-                 <div class="row product-details">
-                     <div class="product-name">Product 4</div>
-                     <div class="product-code">54545se</div>
-                     <div class="product-price">$12.00</div>
-                 </div>
-            </a>
-            <a class="card" href="">
-                 <div class="status">
-                     <div class="status-condition">
-                         <span class="new">New</span>
-                     </div>
-                     <div class="status-stock">
-                         <span class="in-stock">2 In-stock</span>
-                     </div>
-                 </div>
-                 <div class="product-image">
-                     <img class="st-image" >
-                     <img class="nd-image" >
-                 </div>
-                 <div class="row product-details">
-                     <div class="product-name">Product 4</div>
-                     <div class="product-code">efe444</div>
-                     <div class="product-price">$12.00</div>
-                 </div>
-            </a>
+            {% endfor %}
         </div>
     </div>
 </div>

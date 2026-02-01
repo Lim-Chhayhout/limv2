@@ -1,1 +1,17 @@
 {% extends "auth/admin/layouts/base.html" %}
+
+{% block content %}
+    <div class="mgt">
+        {% if page == 'add-sale' %}
+            {% include "auth/admin/layouts/adds/add-sale.html" %}
+        {% elif page == 'show-sale' %}
+            {% include "auth/admin/layouts/shows/show-sale.html" %}
+        {% elif page == 'show-sale-products' %}
+            {% include "auth/admin/layouts/shows/show-sale-products.html" %}
+        {% elif page == 'edit-sale' %}
+            {% include "auth/admin/layouts/edits/edit-sale.html" %}
+        {% else %}
+            {% include "auth/admin/layouts/tables/table-sale.html" %}
+        {% endif %}
+    </div>
+{% endblock %}

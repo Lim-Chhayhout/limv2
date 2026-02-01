@@ -1,0 +1,42 @@
+{% if removed_items %}
+<div class="pop" id="alert-checkout">
+    <div class="con">
+        <div class="head">
+            <i class="fi fi-rr-exclamation"></i>
+            <div class="message">Some products were removed or decrease from your cart due to condition and stock changed!</div>
+        </div>
+        <div class="body">
+            {% for item in removed_items %}
+            <div class="row">
+                <div class="col">
+                    <img src="{{ url_for('static', filename='images/products/' ~ item.image) }}" alt="{{ item.name }}">
+                </div>
+                <div class="col">
+                    <div class="product-name">{{ item.name }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if total_qty == 0 %}
+            <div class="foot">
+                <a href="{{ url_for('cart') }}">
+                    <span class="btn return">
+                        <i class="fi fi-rr-undo"></i>Return to Cart
+                    </span>
+                </a>
+            </div>
+        {% else %}
+            <div class="foot">
+                <a href="{{ url_for('cart') }}">
+                    <span class="btn return">
+                        <i class="fi fi-rr-undo"></i>Return to Cart
+                    </span>
+                </a>
+                <a href="{{ url_for('checkout') }}">
+                    <span class="btn">Continue Checkout<i class="fi fi-rr-arrow-right"></i></span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

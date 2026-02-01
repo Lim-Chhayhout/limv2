@@ -1,0 +1,167 @@
+<div class="head-row">
+    <div class="col">
+        <div class="tag">({{ sale.id }}) {{ sale.order_number if sale else 'No sale' }}</div>
+        <a href="{{ url_for('sale_management_edit', sale_id=sale.id) }}">
+            <div class="edit"><i class="fi fi-rr-edit"></i></div>
+        </a>
+        <a href="{{ url_for('sale_management_delete', sale_id=sale.id) }}"
+           class="delete-link"
+           data-type="sale"
+           data-id="{{ sale.id }}"
+           data-redirect="/sale-management">
+           <div class="delete">
+               <i class="fi fi-rr-trash"></i>
+           </div>
+        </a>
+    </div>
+    <div class="col">
+        <div class="sub">
+            <a href="{{ url_for('sale_management') }}">
+                <div class="btn-back">
+                    <span>Back</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if sale %}
+<form>
+    <div class="col">
+        <div class="box">
+            <div class="row">
+                <h1>Customer</h1>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Name</span>
+                    <input type="text" class="lim-input-style" value="{{ sale.customer.name }}" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Email</span>
+                    <input type="text" class="lim-input-style" value="{{ sale.customer.email }}" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Telephone</span>
+                    <input type="text" class="lim-input-style" value="{{ sale.customer.telephone }}" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Social</span>
+                    <input type="text" class="lim-input-style" value="{{ sale.customer.social or '-' }}" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="row">
+                <h1>Customer Address</h1>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Address</span>
+                    <input type="text" class="lim-input-style" value="{{ sale.customer.address }}" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="row">
+                <h1>Order Info</h1>
+            </div>
+             <div class="row">
+                <div class="lim-input">
+                    <span>Shipping</span>
+                    <select name="shipping_id" class="lim-input-style" disabled>
+                        {% for ship in shipping_methods %}
+                            <option value="{{ ship.id }}" {% if ship.id == sale.shipping_id %}selected{% endif %}>
+                                {{ ship.type }} (${{ '%.2f' % ship.cost }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="lim-input">
+                    <span>Payment</span>
+                    <select name="payment_id" class="lim-input-style" disabled>
+                        {% for pay in payment_methods %}
+                            <option value="{{ pay.id }}" {% if pay.id == sale.payment_id %}selected{% endif %}>
+                                {{ pay.type }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="lim-input">
+                    <span>Order Status</span>
+                    <select name="sale_status" class="lim-input-style" id="shipping-select" disabled>
+                        <option value="Pending" {% if sale.order_status == "Pending" %}selected{% endif %}>Pending</option>
+                        <option value="Success" {% if sale.order_status == "Success" %}selected{% endif %}>Success</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="head-sale">
+            <div class="row summary">
+                <div class="flex">
+                    <h2>Total</h2>
+                    <h2>${{ '%.2f' % sale.total_amount }}</h2>
+                </div>
+                <div class="flex">
+                    <h2>Item</h2>
+                    <h2 class="items">
+                        x{{ order_details | sum(attribute='detail.qty') }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="selected-list">
+            {% for item in order_details %}
+                {% set detail = item.detail %}
+                {% set product_detail = item.product_detail %}
+                <div class="row">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='images/products/' ~ product_detail.image1) }}" alt="{{ product_detail.name }}" width="100%">
+                    </div>
+                    <div class="p-de">
+                        <div class="col">
+                            {% if detail.product_status == "Place-ordered"  %}
+                                <div class="show-product-status-place-ordered">
+                                    {{ detail.product_status }}
+                                </div>
+                            {% else %}
+                                <div class="show-product-status-pre-ordered">
+                                    {{ detail.product_status }}
+                                </div>
+                            {% endif %}
+                            <div class="name">{{ product_detail.name }}</div>
+                            <div class="current-price">${{ '%.2f' % detail.product_price }}</div>
+                            <div class="pq">
+                               {{ detail.qty }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="sub-price">
+                                <input type="text" class="lim-input-style" value="${{ '%.2f' % detail.subtotal }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</form>
+{% else %}
+<p>Sale not found.</p>
+{% endif %}
+
